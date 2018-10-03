@@ -1,5 +1,6 @@
 package edu.up.campus.regier21.dominiongamestate;
 
+import android.content.Context;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,16 +10,19 @@ import static android.content.ContentValues.TAG;
 public class DominionGameState {
     protected DominionPlayerState mDominionPlayers[]; //Sorted by order of turn
     protected int mCurrentTurn; //-1 when game ended
+    Context context;
 
-    protected DominionGameState(int numPlayers) {
+    public DominionGameState(int numPlayers, Context context) {
 
-        mDominionPlayers = new DominionPlayerState[numPlayers];
+        this.mDominionPlayers = new DominionPlayerState[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
-            mDominionPlayers[i] = new DominionPlayerState("Player"+i);
+            this.mDominionPlayers[i] = new DominionPlayerState("Player"+i, context);
         }
 
-        mCurrentTurn = 0;
-}
+        this.mCurrentTurn = 0;
+        this.context = context;
+    }
+
 
     @Override
     protected DominionGameState clone() {
