@@ -18,7 +18,7 @@ public class DominionGameState {
         }
 
         mCurrentTurn = 0;
-    }
+}
 
     @Override
     protected DominionGameState clone() {
