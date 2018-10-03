@@ -5,7 +5,19 @@ public class CardData {
     public DominionCardState[] cards;
     private int numCards = 0;
 
-    public CardData(int uniqueCards) {
+    private static CardData instance;
+
+    public static void createInstance(int uniqueCards){
+        if (instance == null) {
+            instance = new CardData(uniqueCards);
+        }
+    }
+
+    public static CardData getInstance(){
+        return instance;
+    }
+
+    private CardData(int uniqueCards) {
         cards = new DominionCardState[uniqueCards];
     }
 

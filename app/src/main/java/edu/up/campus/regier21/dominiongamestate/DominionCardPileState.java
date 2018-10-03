@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DominionCardPileState {
-    protected ArrayList<DominionCardPileState> cardStack;
+    protected ArrayList<Integer> cardStack;
     protected int totalCards;
     protected final static int uniqueCards = 10;
 
