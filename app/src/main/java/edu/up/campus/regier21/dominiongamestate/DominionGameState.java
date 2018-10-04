@@ -2,25 +2,31 @@ package edu.up.campus.regier21.dominiongamestate;
 
 import android.content.Context;
 import android.util.Log;
-import java.util.ArrayList;
+
 import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
 
 public class DominionGameState {
-    protected DominionPlayerState mDominionPlayers[]; //Sorted by order of turn
-    protected int mCurrentTurn; //-1 when game ended
-    Context context;
+    static protected DominionPileCardsState baseCardPiles;
+    static protected DominionPileCardsState shopCardPiles;
+    protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
+    protected int currentTurn; //-1 when game ended
 
-    public DominionGameState(int numPlayers, Context context) {
+    public DominionGameState(int numPlayers) {
+        this(numPlayers, "base", 10);
+    }
 
-        this.mDominionPlayers = new DominionPlayerState[numPlayers];
+    public DominionGameState(int numPlayers, String cardSet, int numShopCards) {
+        baseCardPiles = new DominionPileCardsState(R.raw.base_cards, cardSet);
+        shopCardPiles = new DominionPileCardsState(numShopCards, R.raw.shop_cards, cardSet);
+
+        this.dominionPlayers = new DominionPlayerState[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
-            this.mDominionPlayers[i] = new DominionPlayerState("Player"+i, context);
+            this.dominionPlayers[i] = new DominionPlayerState("Player"+i);
         }
 
-        this.mCurrentTurn = 0;
-        this.context = context;
+        this.currentTurn = 0;
     }
 
 
@@ -30,7 +36,7 @@ public class DominionGameState {
 
         try{
             clone = (DominionGameState) super.clone();
-            clone.mDominionPlayers = Arrays.copyOf(mDominionPlayers, mDominionPlayers.length);
+            clone.dominionPlayers = Arrays.copyOf(dominionPlayers, dominionPlayers.length);
         }
         catch(CloneNotSupportedException cnse) {
             Log.e(TAG, "Error while cloning DominionGameState: ", cnse);

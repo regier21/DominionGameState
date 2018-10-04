@@ -1,34 +1,35 @@
 package edu.up.campus.regier21.dominiongamestate;
 
-import android.content.Context;
+
+import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static android.content.ContentValues.TAG;
+
 public class DominionCardState {
-    protected String mTitle;
-    protected int mPhotoId;
-    protected String mText;
-    protected int mCost;
-    protected String mType;
-    protected int mAmount;
-    transient Method action;
+    private String title;
+    private int photoID;
+    private String text;
+    private int cost;
+    private String type;
+    private int amount;
+    private transient Method action;
 
-    public DominionCardState(DominionCardState jsonCard) {
-        //this = jsonCard;
-    }
-
-    public DominionCardState (String name, int photoId, String text, int cost, String type, int amount){
-        mTitle = name;
-        mPhotoId = photoId;
-        mText = text;
-        mCost = cost;
-        mType = type;
-        mAmount = amount;
-    }
-
-    public void setmAmount(int mAmount) {
-        this.mAmount = mAmount;
+    public DominionCardState (String name, String photoStringID, String text, int cost, String type, int amount, String action){
+        this.title = name;
+        this.photoID = MainActivity.context.getResources().getIdentifier(photoStringID, "drawable", MainActivity.context.getPackageName());
+        this.text = text;
+        this.cost = cost;
+        this.type = type;
+        this.amount = amount;
+        try {
+            this.action = DominionCardState.class.getDeclaredMethod(action);
+        }
+        catch (NoSuchMethodException e) {
+            Log.e(TAG, "Error encountered reflecting action method: " + e);
+        }
     }
 
     public boolean cardAction() {
@@ -37,14 +38,128 @@ public class DominionCardState {
             return true;
         }
         catch (IllegalArgumentException e) {
-
+            Log.e(TAG, "Illegal argument encountered when running reflected action method: " + e);
         }
         catch (IllegalAccessException e) {
-
+            Log.e(TAG, "Illegal access encountered when running reflected action method: " + e);
         }
         catch (InvocationTargetException e) {
-
+            Log.e(TAG, "Invalid target encountered when running reflected action method: " + e);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "\nDominionCardState: {\n" +
+                "\ttitle: " + getTitle() + ",\n" +
+                "\tmPhotoId: " + getPhotoId() + ",\n" +
+                "\ttext: " + getPlainText() + ",\n" +
+                "\tmCost: " + getmCost() + ",\n" +
+                "\ttype: " + getType() + ",\n" +
+                "\tamount: " + getAmount() + ",\n" +
+                "\taction: " + getAction() + ",\n" +
+                "},";
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getPhotoId() {
+        return photoID;
+    }
+
+    public String getFormattedText() {
+        return text;
+    }
+
+    public String getPlainText() {
+        return text.replaceAll("[\\s]", " ");
+    }
+
+    public int getmCost() {
+        return cost;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public Method getAction() {
+        return action;
+    }
+
+    //Card Action Methods
+    private boolean festivalAction() {
+        return true;
+    }
+
+    private boolean harbingerAction() {
+        return true;
+    }
+
+    private boolean merchantAction() {
+        return true;
+    }
+
+    private boolean remodelAction() {
+        return true;
+    }
+
+    private boolean throneAction() {
+        return true;
+    }
+
+    private boolean artisanAction() {
+        return true;
+    }
+
+    private boolean witchAction() {
+        return true;
+    }
+
+    private boolean libraryAction() {
+        return true;
+    }
+
+    private boolean laboratoryAction() {
+        return true;
+    }
+
+    private boolean militiaAction() {
+        return true;
+    }
+
+    private boolean copperAction() {
+        return true;
+    }
+
+    private boolean estateAction() {
+        return true;
+    }
+
+    private boolean silverAction() {
+        return true;
+    }
+
+    private boolean duchyAction() {
+        return true;
+    }
+
+    private boolean goldAction() {
+        return true;
+    }
+
+    private boolean provinceAction() {
+        return true;
     }
 }

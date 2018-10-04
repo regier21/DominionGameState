@@ -3,32 +3,27 @@ package edu.up.campus.regier21.dominiongamestate;
 import android.content.Context;
 
 public class DominionPlayerState {
-    protected String mName;
-    protected DominionCardPileState mDeckPile;
-    protected DominionCardPileState mDiscardPile;
-    protected DominionCardPileState mHand;
-    protected int mActions;
-    protected int mBuys;
-    protected int mGold;
-    protected int mVP;
-    Context context;
+    protected String name;
+    protected DominionPlayerCardsState deckPile;
+    protected DominionPlayerCardsState discardPile;
+    protected DominionPlayerCardsState hand;
+    protected int actions;
+    protected int buys;
+    protected int gold;
+    protected int victoryPoints;
 
-    protected DominionPlayerState(String name, Context context) {
-        this(name, 5, context); //Default starting hand size is 5
-    }
 
-    protected DominionPlayerState(String name, int numCards, Context context) {
-        this.mName = name;
-        this.mDeckPile = new DominionCardPileState(numCards, R.raw.shop_cards, context);
-        this.mDiscardPile = new DominionCardPileState(context);
-        this.mHand = new DominionCardPileState(context);
+    protected DominionPlayerState(String name) {
+        this.name = name;
+        this.hand = new DominionPlayerCardsState();
+        this.discardPile = new DominionPlayerCardsState();
+        this.deckPile = new DominionPlayerCardsState();
+        this.deckPile.populateStartingDeck();
 
-        this.mActions = 0;
-        this.mBuys = 0;
-        this.mGold = 0;
-        this.mVP = 0;
-
-        this.context = context;
+        this.actions = 0;
+        this.buys = 0;
+        this.gold = 0;
+        this.victoryPoints = 3;
     }
 
 }
