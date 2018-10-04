@@ -10,16 +10,17 @@ import static android.content.ContentValues.TAG;
 
 public class DominionCardState {
     private String title;
-    private int photoID;
+    private String photoID;
     private String text;
     private int cost;
     private String type;
     private int amount;
-    private transient Method action;
+    private Method action;
 
     public DominionCardState (String name, String photoStringID, String text, int cost, String type, int amount, String action){
         this.title = name;
-        this.photoID = MainActivity.context.getResources().getIdentifier(photoStringID, "drawable", MainActivity.context.getPackageName());
+
+        this.photoID = photoStringID;
         this.text = text;
         this.cost = cost;
         this.type = type;
@@ -70,7 +71,7 @@ public class DominionCardState {
         return title;
     }
 
-    public int getPhotoId() {
+    public String getPhotoId() {
         return photoID;
     }
 
@@ -99,67 +100,67 @@ public class DominionCardState {
     }
 
     //Card Action Methods
-    private boolean festivalAction() {
+    private static boolean festivalAction() {
         return true;
     }
 
-    private boolean harbingerAction() {
+    private static boolean harbingerAction() {
         return true;
     }
 
-    private boolean merchantAction() {
+    private static boolean merchantAction() {
         return true;
     }
 
-    private boolean remodelAction() {
+    private static boolean remodelAction() {
         return true;
     }
 
-    private boolean throneAction() {
+    private static boolean throneAction() {
         return true;
     }
 
-    private boolean artisanAction() {
+    private static boolean artisanAction() {
         return true;
     }
 
-    private boolean witchAction() {
+    private static boolean witchAction() {
         return true;
     }
 
-    private boolean libraryAction() {
+    private static boolean libraryAction() {
         return true;
     }
 
-    private boolean laboratoryAction() {
+    private static boolean laboratoryAction() {
         return true;
     }
 
-    private boolean militiaAction() {
+    private static boolean militiaAction() {
         return true;
     }
 
-    private boolean copperAction() {
+    private static boolean copperAction() {
         return true;
     }
 
-    private boolean estateAction() {
+    private static boolean estateAction() {
         return true;
     }
 
-    private boolean silverAction() {
+    private static boolean silverAction() {
         return true;
     }
 
-    private boolean duchyAction() {
+    private static boolean duchyAction() {
         return true;
     }
 
-    private boolean goldAction() {
+    private static boolean goldAction() {
         return true;
     }
 
-    private boolean provinceAction() {
+    private static boolean provinceAction() {
         return true;
     }
 }
