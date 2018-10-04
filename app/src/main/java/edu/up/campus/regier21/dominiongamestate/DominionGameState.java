@@ -28,7 +28,6 @@ public class DominionGameState {
         this.dominionPlayers = new DominionPlayerState[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
             this.dominionPlayers[i] = new DominionPlayerState("Player "+i);
-            //TODO: Set starting deck (see rules)
         }
 
         //TODO: Randomize so host doesn't always go first

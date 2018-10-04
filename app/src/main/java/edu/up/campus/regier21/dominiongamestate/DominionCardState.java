@@ -9,13 +9,13 @@ import java.lang.reflect.Method;
 import static android.content.ContentValues.TAG;
 
 public class DominionCardState {
-    private String title;
-    private String photoID;
-    private String text;
-    private int cost;
-    private String type;
-    private int amount;
-    private Method action;
+    private final String title;
+    private final String photoID;
+    private final String text;
+    private final int cost;
+    private final String type;
+    private final int amount;
+    private final Method action;
 
     public DominionCardState (String name, String photoStringID, String text, int cost, String type, int amount, String action){
         this.title = name;
@@ -25,11 +25,24 @@ public class DominionCardState {
         this.cost = cost;
         this.type = type;
         this.amount = amount;
+
+        this.action = getMethod(action);
+    }
+
+    /**
+     * TODO: External citation
+     * Date: 10/4
+     * Source: https://stackoverflow.com/questions/13604111/final-variable-assignment-with-try-catch
+     * Problem: wouldn't let action be assigned if final
+     * Solution: used method to get Method
+     */
+    private Method getMethod(String action){
         try {
-            this.action = DominionCardState.class.getDeclaredMethod(action);
+            return DominionCardState.class.getDeclaredMethod(action);
         }
         catch (NoSuchMethodException e) {
             Log.e(TAG, "Error encountered reflecting action method: " + e);
+            return null;
         }
     }
 
@@ -63,9 +76,9 @@ public class DominionCardState {
                 "},";
     }
 
-    public void setAmount(int amount) {
+    /*public void setAmount(int amount) {
         this.amount = amount;
-    }
+    }*/
 
     public String getTitle() {
         return title;

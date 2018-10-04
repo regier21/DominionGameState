@@ -6,7 +6,7 @@ public class DominionPlayerState {
     protected String name;
     protected DominionDeckState deck;
     protected DominionPlayerCardsState hand;
-    protected int actions;
+    protected int actions; //TODO: put in game state
     protected int buys;
     protected int gold;
     protected int victoryPoints;
