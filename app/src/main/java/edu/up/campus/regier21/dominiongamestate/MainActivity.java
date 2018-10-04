@@ -21,11 +21,11 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.context = getApplicationContext();
 
         //TEST CODE: Feel free to uncomment for an example as to how DominionCardState's toString() looks
-        DominionPileCardsState shopCards = new DominionPileCardsState(10, R.raw.shop_cards, "base");
+        /*DominionPileCardsState shopCards = new DominionPileCardsState(10, R.raw.shop_cards, "base");
         Log.e(TAG, "onCreate: " + shopCards.toString());
 
         DominionPileCardsState baseCards = new DominionPileCardsState(R.raw.base_cards, "base");
-        Log.e(TAG, "onCreate: " + baseCards.toString());
+        Log.e(TAG, "onCreate: " + baseCards.toString());*/
 
     }
 }

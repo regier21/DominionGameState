@@ -24,7 +24,6 @@ public class GsonDeserializer implements JsonDeserializer<ArrayList<DominionCard
         ArrayList<DominionCardState> cardPiles = new ArrayList<>(10);
         jsonCards.forEach(cards -> {
             JsonObject card = cards.getAsJsonObject();
-            Log.i(TAG, "deserialize: " + card.get("photoStringID").getAsString());
             cardPiles.add(
                     new DominionCardState(
                         card.getAsJsonObject().get("title").getAsString(),
