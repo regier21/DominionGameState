@@ -1,35 +1,43 @@
 package edu.up.campus.regier21.dominiongamestate;
 
-import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
 
 public class DominionGameState {
-    static protected DominionPileCardsState baseCardPiles;
-    static protected DominionPileCardsState shopCardPiles;
+
+    protected static ArrayList<DominionCardState> baseCards;
+    protected static ArrayList<DominionCardState> shopCards;
     protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
     protected int currentTurn; //-1 when game ended
+    protected int attackTurn;
+    protected boolean isAttackTurn;
+    //TODO: hold shop data
 
-    public DominionGameState(int numPlayers) {
-        this(numPlayers, "base", 10);
-    }
+    /*public DominionGameState(int numPlayers) {
+        this(numPlayers, );
+    }*/
 
-    public DominionGameState(int numPlayers, String cardSet, int numShopCards) {
-        baseCardPiles = new DominionPileCardsState(R.raw.base_cards, cardSet);
-        shopCardPiles = new DominionPileCardsState(numShopCards, R.raw.shop_cards, cardSet);
+    public DominionGameState(int numPlayers, ArrayList<DominionCardState> baseCards, ArrayList<DominionCardState> shopCards) {
+        this.baseCards = baseCards;
+        this.shopCards = shopCards;
 
         this.dominionPlayers = new DominionPlayerState[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
-            this.dominionPlayers[i] = new DominionPlayerState("Player"+i);
+            this.dominionPlayers[i] = new DominionPlayerState("Player "+i);
         }
 
+        //TODO: Randomize so host doesn't always go first
         this.currentTurn = 0;
+
+        this.isAttackTurn = false;
     }
 
 
+    //TODO: finish
     @Override
     protected DominionGameState clone() {
         DominionGameState clone = null;
@@ -49,5 +57,13 @@ public class DominionGameState {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    public ArrayList<DominionCardState> getBaseCards() {
+        return baseCards;
+    }
+
+    public ArrayList<DominionCardState> getShopCards() {
+        return shopCards;
     }
 }

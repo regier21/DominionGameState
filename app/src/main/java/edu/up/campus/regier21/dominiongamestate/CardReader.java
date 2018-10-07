@@ -1,6 +1,9 @@
 package edu.up.campus.regier21.dominiongamestate;
 
 
+import android.content.Context;
+import android.support.annotation.IdRes;
+import android.support.annotation.RawRes;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -16,22 +19,26 @@ import java.util.Collections;
 
 import static android.content.ContentValues.TAG;
 
-public class DominionPileCardsState extends DominionCardsAbstract {
-    public DominionPileCardsState(int resourceID, String cardSet) {
-        this(-1, resourceID, cardSet); //-1 populates cards with all card piles from the set
+public class CardReader{
+
+    GsonBuilder gsonBuilder;
+    Type arrayType;
+    Gson gsonParser;
+
+    public CardReader() {
+        //cards = generateCards(uniqueCardPiles, resourceID);
+        gsonBuilder = new GsonBuilder();
+        arrayType = new TypeToken<ArrayList<DominionCardState>>(){}.getType();
+        gsonBuilder.registerTypeAdapter(arrayType, new GsonDeserializer());
+        gsonParser = gsonBuilder.create();
     }
 
-    public DominionPileCardsState(int uniqueCardPiles, int resourceID, String cardSet) {
-        cards = generateCards(uniqueCardPiles, resourceID);
+    public ArrayList<DominionCardState> generateCards(Context context, @RawRes int resourceID){
+        return generateCards(context, -1, resourceID);
     }
 
-    private ArrayList<DominionCardState> generateCards(int uniqueCardPiles, int resourceID) {
-        try (InputStream ins = MainActivity.context.getResources().openRawResource(resourceID)) {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            Type arrayType = new TypeToken<ArrayList<DominionCardState>>(){}.getType();
-            gsonBuilder.registerTypeAdapter(arrayType, new GsonDeserializer());
-            Gson gsonParser = gsonBuilder.create();
-
+    public ArrayList<DominionCardState> generateCards(Context context, int uniqueCardPiles, @RawRes int resourceID) {
+        try (InputStream ins = context.getResources().openRawResource(resourceID)) {
             ArrayList<DominionCardState> cardPiles = gsonParser.fromJson(new InputStreamReader(ins, "UTF-8"), arrayType);
             return (uniqueCardPiles > 0) ? selectCards(cardPiles, uniqueCardPiles) : cardPiles;
         }
@@ -48,7 +55,4 @@ public class DominionPileCardsState extends DominionCardsAbstract {
         }
         return cardPiles;
     }
-
-
-
 }
