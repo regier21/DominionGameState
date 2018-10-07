@@ -6,33 +6,33 @@ public class DominionPlayerState {
     protected String name;
     protected DominionDeckState deck;
     protected DominionPlayerCardsState hand;
-    protected int actions; //TODO: put in game state
-    protected int buys;
-    protected int gold;
+
     protected int victoryPoints;
 
 
-    protected DominionPlayerState(String name) {
+    protected DominionPlayerState(String name, DominionShopPileState copper, DominionCardState estate) {
         this.name = name;
         this.hand = new DominionPlayerCardsState();
-        this.deck = new DominionDeckState();
-        populateStartingDeck();
+        this.deck = new DominionDeckState(10);
 
-        this.actions = 0;
-        this.buys = 0;
-        this.gold = 0;
+        populateStartingDeck(copper, estate);
+
         this.victoryPoints = 3;
     }
 
-    public void populateStartingDeck() {
-        //ToDo: Write some logic to search the JSON if copper/estates are not found at the proper positions
-        DominionCardState copper = DominionGameState.baseCards.get(0); //0 must be hardcoded as copper in the json
-        deck.addManyToDiscard(copper, 7);
-
-        DominionCardState estate = DominionGameState.baseCards.get(1); //1 must be hardcoded as estate in the json
+    public void populateStartingDeck(DominionShopPileState copper, DominionCardState estate) {
+        deck.addManyToDiscard(copper.getCard(), 7);
+        copper.removeAmount(7);
         deck.addManyToDiscard(estate, 3);
-
         deck.reshuffle();
     }
 
+    public DominionDeckState getDeck() {
+        return deck;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("Player: %s\n%s\n%s", name, deck.toString(), hand.toString());
+    }
 }

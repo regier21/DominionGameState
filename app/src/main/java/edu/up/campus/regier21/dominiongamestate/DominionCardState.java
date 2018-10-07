@@ -13,7 +13,7 @@ public class DominionCardState {
     private final String photoID;
     private final String text;
     private final int cost;
-    private final String type;
+    private final DominionCardType type;
     private final int amount;
     private final Method action;
 
@@ -23,7 +23,10 @@ public class DominionCardState {
         this.photoID = photoStringID;
         this.text = text;
         this.cost = cost;
-        this.type = type;
+        this.type = DominionCardType.getTypeFromString(type);
+        if (this.type == null){
+            Log.e(TAG, "Illegal type");
+        }
         this.amount = amount;
 
         this.action = getMethod(action);
@@ -100,7 +103,7 @@ public class DominionCardState {
         return cost;
     }
 
-    public String getType() {
+    public DominionCardType getType() {
         return type;
     }
 
@@ -174,6 +177,10 @@ public class DominionCardState {
     }
 
     private static boolean provinceAction() {
+        return true;
+    }
+
+    private static boolean basicAction(){
         return true;
     }
 }
