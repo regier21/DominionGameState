@@ -1,9 +1,11 @@
 package edu.up.campus.regier21.dominiongamestate;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
 
@@ -25,6 +27,9 @@ public class DominionGameState {
     protected int attackTurn;
     protected boolean isAttackTurn;
     protected boolean isGameOver;
+
+    private int emptyPiles;
+    private boolean provinceEmpty;
 
     private static DominionGameState instance;
 
@@ -77,8 +82,10 @@ public class DominionGameState {
 
         this.attackTurn = 0;
         this.isAttackTurn = false;
-    }
 
+        emptyPiles = 0;
+        provinceEmpty = false;
+    }
 
     //TODO: finish
     @Override
@@ -97,9 +104,60 @@ public class DominionGameState {
         return clone;
     }
 
-    //ToDo: Implement method
+    protected void hideInformation(DominionGameState state, int playerID){
+        //TODO
+    }
+
     @Override
     public String toString() {
-        return super.toString();
+
+        String turnStr, baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr;
+
+        String attackString = "";
+        if (isAttackTurn){
+            attackString = String.format(Locale.US,
+                    "An attack has been played. Player #%d is responding to the attack", attackTurn);
+        }
+        turnStr = String.format(Locale.US, "It is player #%d's turn. %s", currentTurn, attackString);
+
+        String[] baseStrs = new String[baseCards.size()];
+        for (int i = 0; i < baseCards.size(); i++){
+            baseStrs[i] = baseCards.get(i).toString();
+        }
+
+        /**
+         * TODO
+         * Date: 10/7
+         * Resource: https://stackoverflow.com/questions/1978933/a-quick-and-easy-way-to-join-array-elements-with-a-separator-the-opposite-of-sp
+         */
+        baseStr = String.format(Locale.US, "The base cards in the shop:\n%s",
+                TextUtils.join("\n", baseStrs));
+
+        String[] shopStrs = new String[shopCards.size()];
+        for (int i = 0; i < shopCards.size(); i++){
+            shopStrs[i] = shopCards.get(i).toString();
+        }
+        shopStr = String.format(Locale.US, "The kingdom cards in the shop:\n%s",
+                TextUtils.join("\n", shopStrs));
+
+        String[] playerStrs = new String[dominionPlayers.length];
+        for (int i = 0; i < dominionPlayers.length; i++){
+            playerStrs[i] = dominionPlayers[i].toString();
+        }
+        playerStr = String.format(Locale.US, "There are %d players in the game:\n%s",
+                dominionPlayers.length, TextUtils.join("\n", playerStrs));
+
+        emptyPilesStr = String.format(Locale.US, "There are %d empty piles.", emptyPiles);
+
+        if (isGameOver){
+            gameOverStr = "The game is over.";
+        } else {
+            gameOverStr = "The game is not over.";
+        }
+
+        String result = String.format(Locale.US, "%s\n%s\n%s\n%s\n%s\n%s", turnStr, baseStr, shopStr,
+                playerStr, emptyPilesStr, gameOverStr);
+
+        return result;
     }
 }
