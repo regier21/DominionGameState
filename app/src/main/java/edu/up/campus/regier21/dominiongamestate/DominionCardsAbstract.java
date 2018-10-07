@@ -2,7 +2,7 @@ package edu.up.campus.regier21.dominiongamestate;
 
 import java.util.ArrayList;
 
-public class DominionCardsAbstract {
+abstract class DominionCardsAbstract {
     public ArrayList<DominionCardState> cards;
 
     public ArrayList<DominionCardState> getCards() {
