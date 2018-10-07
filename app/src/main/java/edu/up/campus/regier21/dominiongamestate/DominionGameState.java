@@ -28,6 +28,10 @@ public class DominionGameState {
     protected boolean isAttackTurn;
     protected boolean isGameOver;
 
+    protected int actions;
+    protected int buys;
+    protected int treasure;
+
     private int emptyPiles;
     private boolean provinceEmpty;
 
@@ -65,7 +69,7 @@ public class DominionGameState {
         }
 
         shopCards = new ArrayList<>(shopCardArray.size());
-        for (DominionCardState card: baseCardArray){
+        for (DominionCardState card: shopCardArray){
             shopCards.add(new DominionShopPileState(card, card.getAmount()));
         }
 
@@ -78,6 +82,10 @@ public class DominionGameState {
 
         //TODO: Randomize so host doesn't always go first
         this.currentTurn = 0;
+        this.treasure = 0;
+        this.buys = 1;
+        this.actions = 1;
+
         this.isGameOver = false;
 
         this.attackTurn = 0;
@@ -111,7 +119,7 @@ public class DominionGameState {
     @Override
     public String toString() {
 
-        String turnStr, baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr;
+        String turnStr, gabStr, baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr;
 
         String attackString = "";
         if (isAttackTurn){
@@ -119,6 +127,9 @@ public class DominionGameState {
                     "An attack has been played. Player #%d is responding to the attack", attackTurn);
         }
         turnStr = String.format(Locale.US, "It is player #%d's turn. %s", currentTurn, attackString);
+
+        gabStr = String.format(Locale.US, "There are %d buys, %d actions, and %d treasure remaining.",
+                buys, actions, treasure);
 
         String[] baseStrs = new String[baseCards.size()];
         for (int i = 0; i < baseCards.size(); i++){
@@ -155,9 +166,7 @@ public class DominionGameState {
             gameOverStr = "The game is not over.";
         }
 
-        String result = String.format(Locale.US, "%s\n%s\n%s\n%s\n%s\n%s", turnStr, baseStr, shopStr,
-                playerStr, emptyPilesStr, gameOverStr);
-
-        return result;
+        return String.format(Locale.US, "%s\n%s\n%s\n%s\n%s\n%s\n%s", turnStr, gabStr,
+                baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr);
     }
 }

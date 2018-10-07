@@ -1,8 +1,11 @@
 package edu.up.campus.regier21.dominiongamestate;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 
 /**
  * Holds state information for a player's deck, including their draw and discard piles
@@ -144,5 +147,27 @@ public class DominionDeckState {
     public int countVictory(){
         //TODO: implement
         return 0;
+    }
+
+    @Override
+    public String toString(){
+
+        String[] drawStr = new String[draw.size()];
+        String[] discardStr = new String[discard.size()];
+        String[] inPlayStr = new String[inPlay.size()];
+
+        createCardArray(drawStr, draw);
+        createCardArray(discardStr, discard);
+        createCardArray(inPlayStr, inPlay);
+
+        return String.format(Locale.US, "Deck\n\tDraw: %s\n\tDiscard: %s\n\tIn Play: %s",
+                TextUtils.join(",", drawStr), TextUtils.join(",", discardStr),
+                TextUtils.join(",", inPlayStr));
+    }
+
+    private void createCardArray(String[] array, ArrayList<DominionCardState> cards){
+        for (int i = 0; i < array.length; i++){
+            array[i] = cards.get(i).getTitle();
+        }
     }
 }

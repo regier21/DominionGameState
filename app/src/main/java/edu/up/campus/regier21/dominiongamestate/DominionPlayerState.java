@@ -6,9 +6,7 @@ public class DominionPlayerState {
     protected String name;
     protected DominionDeckState deck;
     protected DominionPlayerCardsState hand;
-    protected int actions; //TODO: put in game state
-    protected int buys;
-    protected int gold;
+
     protected int victoryPoints;
 
 
@@ -19,9 +17,6 @@ public class DominionPlayerState {
 
         populateStartingDeck(copper, estate);
 
-        this.actions = 0;
-        this.buys = 0;
-        this.gold = 0;
         this.victoryPoints = 3;
     }
 
@@ -34,5 +29,10 @@ public class DominionPlayerState {
 
     public DominionDeckState getDeck() {
         return deck;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("Player: %s\n%s\n%s", name, deck.toString(), hand.toString());
     }
 }

@@ -1,5 +1,7 @@
 package edu.up.campus.regier21.dominiongamestate;
 
+import java.util.Locale;
+
 public class DominionShopPileState {
     private DominionCardState card;
     private int amount;
@@ -23,5 +25,10 @@ public class DominionShopPileState {
 
     public void removeAmount(int amount){
         this.amount -= amount;
+    }
+
+    @Override
+    public String toString(){
+        return String.format(Locale.US, "Card pile. Card: %s, Amount: %d", card.getTitle(), amount);
     }
 }
