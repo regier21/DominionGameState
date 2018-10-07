@@ -14,6 +14,12 @@ public class DominionDeckState {
     private ArrayList<DominionCardState> discard;
     private ArrayList<DominionCardState> inPlay;
 
+    public DominionDeckState(int startSize){
+        draw = new ArrayList<>(startSize);
+        discard = new ArrayList<>(startSize);
+        inPlay = new ArrayList<>(10);
+    }
+
     /**
      * Returns the top card from the draw pile, shuffling if necessary
      * @return The revealed card, or null if deck is empty

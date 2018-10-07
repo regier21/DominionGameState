@@ -20,13 +20,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TEST CODE: Feel free to uncomment for an example as to how DominionCardState's toString() looks
         CardReader reader = new CardReader();
         ArrayList<DominionCardState> shopCards = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
-        Log.e(TAG, "onCreate: " + shopCards.toString());
+        Log.i(TAG, "onCreate: " + shopCards.toString());
 
         ArrayList<DominionCardState> baseCards = reader.generateCards(getApplicationContext(), R.raw.base_cards);
-        Log.e(TAG, "onCreate: " + baseCards.toString());
-        Log.e(TAG, "onCreate: " + baseCards.toString());
+        Log.i(TAG, "onCreate: " + baseCards.toString());
+
+        DominionGameState.setupInstance(4, baseCards, shopCards);
+        DominionGameState game = DominionGameState.getInstance();
+        Log.i(TAG, game.toString());
     }
 }
