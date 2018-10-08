@@ -40,4 +40,42 @@ public class DominionGameState {
     public String toString() {
         return super.toString();
     }
+
+
+    public boolean revealCard(int playerID, DominionGameState card){
+        return false;
+    }
+
+    public boolean discardCard(int playerID, DominionGameState card){
+        return false;
+    }
+
+    public boolean buyCard(int playerID, DominionGameState card){
+        return false;
+    }
+
+    public boolean chooseCard(int playerID, DominionGameState card){
+        return false;
+    }
+
+    public boolean endTurn(int playerID){
+        return false;
+    }
+
+    public boolean voteCards(int playerID){
+        return false;
+    }
+
+    public boolean gainCard(int playerID, DominionGameState card){
+        return false;
+    }
+
+    public boolean quit(int playerID){
+        return false;
+    }
+
+    public boolean playCard(int playerID, DominionGameState card){
+        return false;
+    }
+
 }
