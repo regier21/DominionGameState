@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DominionGameState</string>
+    <string name="runButton">Run Test</string>
 </resources>
