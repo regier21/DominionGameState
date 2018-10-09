@@ -2,11 +2,17 @@ package edu.up.campus.regier21.dominiongamestate;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+
 import android.util.Log;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button runTestButton;
 
     /*
     TODO: External citation
@@ -20,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        runTestButton = (Button)findViewById(R.id.buttonRunTest);
+        runTestButton.setOnClickListener(buttonOnClickListener);
+
+
         CardReader reader = new CardReader();
         ArrayList<DominionCardState> shopCards = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
         Log.i(TAG, "onCreate: " + shopCards.toString());
@@ -31,4 +41,10 @@ public class MainActivity extends AppCompatActivity {
         DominionGameState game = DominionGameState.getInstance();
         Log.i(TAG, game.toString());
     }
+
+   private Button.OnClickListener buttonOnClickListener = new Button.OnClickListener(){
+       public void onClick(View v){
+
+       }
+   };
 }
