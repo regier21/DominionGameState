@@ -56,6 +56,7 @@ public class DominionGameState {
 
         //RULE: With 2 players, 8 of each victory card should exist
         //      With 3-4 players, default to 12 copies of each victory card
+        //TODO: make constant
         if (numPlayers == 2) numVictory = 8;
 
         //Generate shop
@@ -98,7 +99,7 @@ public class DominionGameState {
 
         this.isGameOver = false;
 
-        this.attackTurn = 0;
+        this.attackTurn = this.currentTurn;
         this.isAttackTurn = false;
 
         emptyPiles = 0;
