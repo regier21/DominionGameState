@@ -6,21 +6,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Holds state information for a player's deck, including their draw and discard piles
- * @author Ryan Regier
+ * @author Ryan Regier, Julian Donovan
  */
 public class DominionDeckState {
 
     private ArrayList<DominionCardState> draw;
     private ArrayList<DominionCardState> discard;
-    private ArrayList<DominionCardState> inPlay;
+    private ArrayList<DominionCardState> hand;
 
     public DominionDeckState(int startSize){
         draw = new ArrayList<>(startSize);
         discard = new ArrayList<>(startSize);
-        inPlay = new ArrayList<>(10);
+        hand = new ArrayList<>(startSize);
     }
 
     /**
@@ -55,9 +57,9 @@ public class DominionDeckState {
         }
 
         int index = draw.size() - 1;
-        DominionCardState card = draw.get(index);
+        DominionCardState card = reveal();
         draw.remove(card);
-        inPlay.add(card);
+        hand.add(card);
         return card;
     }
 
@@ -76,7 +78,7 @@ public class DominionDeckState {
      */
     public void discard(DominionCardState card){
         discard.add(card);
-        inPlay.remove(card);
+        hand.remove(card);
     }
 
     /**
@@ -103,11 +105,11 @@ public class DominionDeckState {
      * Discards all cards that have been drawn and not yet discarded.
      */
     public void discardAll(){
-        for (DominionCardState card: inPlay){
+        for (DominionCardState card: hand){
             discard.add(card);
         }
 
-        inPlay.clear();
+        hand.clear();
     }
 
     /**
@@ -145,7 +147,11 @@ public class DominionDeckState {
      * @return Number of victory points
      */
     public int countVictory(){
-        //TODO: implement
+        //TODO: Finish implementation by adding VP var for DominionCardState
+        /*Stream.of(discard.parallelStream(), hand.parallelStream(), discard.parallelStream())
+                .flatMap(s -> s)
+                .filter(s -> s.getType().equals(DominionCardType.VICTORY))
+                .mapToInt(s -> s.get`)*/ //We don't have a VP var per card
         return 0;
     }
 
@@ -154,15 +160,15 @@ public class DominionDeckState {
 
         String[] drawStr = new String[draw.size()];
         String[] discardStr = new String[discard.size()];
-        String[] inPlayStr = new String[inPlay.size()];
+        String[] handStr = new String[hand.size()];
 
         createCardArray(drawStr, draw);
         createCardArray(discardStr, discard);
-        createCardArray(inPlayStr, inPlay);
+        createCardArray(handStr, hand);
 
-        return String.format(Locale.US, "Deck\n\tDraw: %s\n\tDiscard: %s\n\tIn Play: %s",
+        return String.format(Locale.US, "Deck\n\tDraw: %s\n\tDiscard: %s\n\tHand: %s",
                 TextUtils.join(",", drawStr), TextUtils.join(",", discardStr),
-                TextUtils.join(",", inPlayStr));
+                TextUtils.join(",", handStr));
     }
 
     private void createCardArray(String[] array, ArrayList<DominionCardState> cards){

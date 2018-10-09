@@ -11,6 +11,7 @@ import java.util.Random;
 import static android.content.ContentValues.TAG;
 
 /**
+ * A data class intended to represent the state of a game object
  * @author Ryan Regier, Julian Donovan, Ashika Mulgada, Hayden Liao
  */
 public class DominionGameState {
@@ -105,8 +106,8 @@ public class DominionGameState {
     }
 
     /**
-     *
-     * @return
+     * Clones a DominionGameState, returning a deep copy
+     * @return A deep copy of DominionGameState
      */
     //TODO: finish
     @Override
@@ -125,6 +126,11 @@ public class DominionGameState {
         return clone;
     }
 
+    /**
+     * Yields information to the player as necessary, obscuring game state data not relevant to that particular player
+     * @param state Relevant DominionGameState from which data will be gathered
+     * @param playerID PlayerID in question, for which data will be found
+     */
     protected void hideInformation(DominionGameState state, int playerID){
         //TODO
     }

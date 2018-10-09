@@ -7,14 +7,12 @@ package edu.up.campus.regier21.dominiongamestate;
 public class DominionPlayerState {
     protected String name;
     protected DominionDeckState deck;
-    protected DominionPlayerCardsState hand;
     protected int victoryPoints;
 
     protected DominionPlayerState(String name, DominionShopPileState copper, DominionCardState estate) {
         this.name = name;
 
         //Initializes player hand and deck, populating the deck's discard pile member variable
-        this.hand = new DominionPlayerCardsState(); //TODO: Merge PlayerCardsState into DeckState
         this.deck = new DominionDeckState(10);
         populateStartingDeck(copper, estate);
 
@@ -44,6 +42,6 @@ public class DominionPlayerState {
      */
     @Override
     public String toString(){
-        return String.format("Player: %s\n%s\n%s", name, deck.toString(), hand.toString());
+        return String.format("Player: %s\n%s", name, deck.toString());
     }
 }
