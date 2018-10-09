@@ -1,5 +1,9 @@
 package edu.up.campus.regier21.dominiongamestate;
 
+/**
+ * Enum class purposed to handle DominionCardState types
+ * @author Ryan Regier
+ */
 public enum DominionCardType {
     TREASURE,
     VICTORY,
@@ -7,6 +11,11 @@ public enum DominionCardType {
     ATTACK,
     REACTION;
 
+    /**
+     * Parses a given string, converting its character value to a DominionCardType enum
+     * @param typeName A String representing a DominionCardType enum
+     * @return A DominionCardType enum, describing card type
+     */
     public static DominionCardType getTypeFromString(String typeName){
         for (DominionCardType type : values()){
             if (type.name().equals(typeName)){

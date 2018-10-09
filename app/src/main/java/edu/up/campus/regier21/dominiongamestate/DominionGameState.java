@@ -6,9 +6,13 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Random;
 
 import static android.content.ContentValues.TAG;
 
+/**
+ * @author Ryan Regier, Julian Donovan, Ashika Mulgada, Hayden Liao
+ */
 public class DominionGameState {
 
     /**
@@ -32,12 +36,13 @@ public class DominionGameState {
     protected int buys;
     protected int treasure;
 
+    private int numVictory;
     private int emptyPiles;
     private boolean provinceEmpty;
 
     private static DominionGameState instance;
 
-    public static void setupInstance(int numPlayers, ArrayList<DominionCardState> baseCards, ArrayList<DominionCardState> shopCards){
+    public static void setupInstance(int numPlayers, ArrayList<DominionShopPileState> baseCards, ArrayList<DominionShopPileState> shopCards){
         instance = new DominionGameState(numPlayers, baseCards, shopCards);
     }
 
@@ -45,33 +50,38 @@ public class DominionGameState {
         return instance;
     }
 
-    private DominionGameState(int numPlayers, ArrayList<DominionCardState> baseCardArray,
-                              ArrayList<DominionCardState> shopCardArray) {
+    private DominionGameState(int numPlayers, ArrayList<DominionShopPileState> baseCardArray,
+                              ArrayList<DominionShopPileState> shopCardArray) {
 
-        //RULE: With 2 players, have 8 of each victory card.
-        //      With 3-4 players, have 12 copies of each card.
-        int numVictory; //Number of each victory card in the shop
-        if (numPlayers == 2){
-            numVictory = 8;
-        } else {
-            numVictory = 12;
-        }
+        //RULE: With 2 players, 8 of each victory card should exist
+        //      With 3-4 players, default to 12 copies of each victory card
+        if (numPlayers == 2) numVictory = 8;
 
         //Generate shop
-
-        baseCards = new ArrayList<>(baseCardArray.size());
-        for (DominionCardState card : baseCardArray){
-            if (card.getType() == DominionCardType.VICTORY){
-                baseCards.add(new DominionShopPileState(card, numVictory));
-            } else {
-                baseCards.add(new DominionShopPileState(card, card.getAmount()));
+        for (DominionShopPileState pile : baseCardArray){
+            if (numVictory != 12 && pile.getCard().getType() == DominionCardType.VICTORY){
+                pile.setAmount(8);
+                //A nice three step process for when Ryan doesn't like my code - 1:
+                //baseCards.add(new DominionShopPileState(pile.getCard(), numVictory));
             }
+            //Uncomment this - 2:
+            //else baseCards.add(pile);
         }
+        //And comment this junk out - 3:
+        baseCards = baseCardArray;
 
-        shopCards = new ArrayList<>(shopCardArray.size());
-        for (DominionCardState card: shopCardArray){
-            shopCards.add(new DominionShopPileState(card, card.getAmount()));
+        //Handles victory point shop card edge case (ex. Gardens)
+        for (DominionShopPileState pile : shopCardArray){
+            if (numVictory != 12 && pile.getCard().getType() == DominionCardType.VICTORY){
+                pile.setAmount(8);
+                //The same nice three step process for when Ryan doesn't like my code - 1:
+                //baseCards.add(new DominionShopPileState(pile.getCard(), numVictory));
+            }
+            //Uncomment this - 2:
+            //else baseCards.add(pile);
         }
+        //And comment this junk out - 3:
+        shopCards = shopCardArray;
 
         this.dominionPlayers = new DominionPlayerState[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
@@ -80,8 +90,7 @@ public class DominionGameState {
                     baseCards.get(1).getCard()); //The estate card
         }
 
-        //TODO: Randomize so host doesn't always go first
-        this.currentTurn = 0;
+        this.currentTurn = new Random().nextInt(numPlayers);
         this.treasure = 0;
         this.buys = 1;
         this.actions = 1;
@@ -95,6 +104,10 @@ public class DominionGameState {
         provinceEmpty = false;
     }
 
+    /**
+     *
+     * @return
+     */
     //TODO: finish
     @Override
     protected DominionGameState clone() {

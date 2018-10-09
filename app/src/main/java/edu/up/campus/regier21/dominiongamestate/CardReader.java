@@ -1,8 +1,6 @@
 package edu.up.campus.regier21.dominiongamestate;
 
-
 import android.content.Context;
-import android.support.annotation.IdRes;
 import android.support.annotation.RawRes;
 import android.util.Log;
 
@@ -19,27 +17,45 @@ import java.util.Collections;
 
 import static android.content.ContentValues.TAG;
 
+/**
+ * A wrapper class for GsonDeserializer purposed to provide card generation abstraction
+ * @author Julian Donovan, Ryan Regier
+ */
 public class CardReader{
 
     GsonBuilder gsonBuilder;
     Type arrayType;
     Gson gsonParser;
 
-    public CardReader() {
-        //cards = generateCards(uniqueCardPiles, resourceID);
+    public CardReader(String expansionSet) {
         gsonBuilder = new GsonBuilder();
-        arrayType = new TypeToken<ArrayList<DominionCardState>>(){}.getType();
-        gsonBuilder.registerTypeAdapter(arrayType, new GsonDeserializer());
+        arrayType = new TypeToken<ArrayList<DominionShopPileState>>(){}.getType();
+        gsonBuilder.registerTypeAdapter(arrayType, new GsonDeserializer(expansionSet));
         gsonParser = gsonBuilder.create();
     }
 
-    public ArrayList<DominionCardState> generateCards(Context context, @RawRes int resourceID){
+    /**
+     * An overloaded generateCards method intended to simplify cases where all possible
+     * DominionShopPileState objects should be extracted from the JSON file in question
+     * @param context Application context allowing for global information regarding environment/resources
+     * @param resourceID Application-specific resource file reference
+     * @return A DominionShopPileState ArrayList as populated by GsonDeserializer
+     */
+    public ArrayList<DominionShopPileState> generateCards(Context context, @RawRes int resourceID){
         return generateCards(context, -1, resourceID);
     }
 
-    public ArrayList<DominionCardState> generateCards(Context context, int uniqueCardPiles, @RawRes int resourceID) {
+    /**
+     * Intended to return the specified number of DominionShopPileState objects as extracted and
+     * randomly selected from the JSON file in question
+     * @param context Application context allowing for global information regarding environment/resources
+     * @param uniqueCardPiles Describes the number of DominionShopPileState objects to put in the ArrayList
+     * @param resourceID Application-specific resource file reference
+     * @return A DominionShopPileState ArrayList as populated by GsonDeserializer
+     */
+    public ArrayList<DominionShopPileState> generateCards(Context context, int uniqueCardPiles, @RawRes int resourceID) {
         try (InputStream ins = context.getResources().openRawResource(resourceID)) {
-            ArrayList<DominionCardState> cardPiles = gsonParser.fromJson(new InputStreamReader(ins, "UTF-8"), arrayType);
+            ArrayList<DominionShopPileState> cardPiles = gsonParser.fromJson(new InputStreamReader(ins, "UTF-8"), arrayType);
             return (uniqueCardPiles > 0) ? selectCards(cardPiles, uniqueCardPiles) : cardPiles;
         }
         catch (IOException e) {
@@ -48,10 +64,18 @@ public class CardReader{
         }
     }
 
-    private ArrayList<DominionCardState> selectCards(ArrayList<DominionCardState> cardPiles, int uniqueCardPiles) {
+    /**
+     * Returns a selection of the DominionShopPileState ArrayList as parsed by GsonDeserializer
+     * @param cardPiles ArrayList of DominionShopPileState objects as parsed by GsonDeserializer
+     * @param uniqueCardPiles Number of unique, requested card piles
+     * @return An ArrayList of DominionShopPileState objects equal to or less than uniqueCardPiles
+     *         (considering that uniqueCardPiles could be greater than the number of unique cards
+     *         stored in JSON)
+     */
+    private ArrayList<DominionShopPileState> selectCards(ArrayList<DominionShopPileState> cardPiles, int uniqueCardPiles) {
         if (cardPiles.size() > uniqueCardPiles) {
             Collections.shuffle(cardPiles);
-            return ((ArrayList<DominionCardState>) cardPiles.subList(0, uniqueCardPiles));
+            return (ArrayList<DominionShopPileState>) cardPiles.subList(0, uniqueCardPiles);
         }
         return cardPiles;
     }

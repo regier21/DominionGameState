@@ -2,6 +2,10 @@ package edu.up.campus.regier21.dominiongamestate;
 
 import java.util.Locale;
 
+/**
+ * A data class intended to represent the state of a shop card pile object
+ * @author Ryan Regier, Julian Donovan
+ */
 public class DominionShopPileState {
     private DominionCardState card;
     private int amount;
@@ -17,6 +21,10 @@ public class DominionShopPileState {
 
     public int getAmount(){
         return amount;
+    }
+
+    public void setAmount(int amount){
+        this.amount = amount;
     }
 
     public void removeCard(){
