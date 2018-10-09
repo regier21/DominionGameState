@@ -18,8 +18,14 @@ public class DominionCardState {
     private final int cost;
     private final DominionCardType type;
     private final Method action;
+    private final int addedTreasure;
+    private final int addedActions;
+    private final int addedDraw;
+    private final int addedBuys;
+    private final int victoryPoints;
 
-    public DominionCardState (String name, String photoStringID, String text, int cost, String type, String action){
+    public DominionCardState (String name, String photoStringID, String text, int cost, String type, String action,
+                              int addedTreasure, int addedActions, int addedDraw, int addedBuys, int victoryPoints){
         this.title = name;
 
         this.photoID = photoStringID;
@@ -32,6 +38,12 @@ public class DominionCardState {
 
         //Dynamically assigned by method reflection, allowing for a String method reference to be held in JSON
         this.action = getMethod(action);
+
+        this.addedTreasure = addedTreasure;
+        this.addedActions = addedActions;
+        this.addedDraw = addedDraw;
+        this.addedBuys = addedBuys;
+        this.victoryPoints = victoryPoints;
     }
 
     /**
@@ -93,6 +105,11 @@ public class DominionCardState {
                 "\tcost: " + getCost() + ",\n" +
                 "\ttype: " + getType() + ",\n" +
                 "\taction: " + getAction() + ",\n" +
+                "\taddedTreasures: " + getAddedTreasure() + ",\n" +
+                "\taddedActions: " + getAddedActions() + ",\n" +
+                "\taddedDraw: " + getAddedDraw() + ",\n" +
+                "\taddedBuys: " + getAddedBuys() + ",\n" +
+                "\tvictoryPoints: " + getVictoryPoints() + ",\n" +
                 "},";
     }
 
@@ -123,6 +140,16 @@ public class DominionCardState {
     public Method getAction() {
         return action;
     }
+
+    public int getAddedTreasure() { return addedTreasure; }
+
+    public int getAddedActions() { return addedActions; }
+
+    public int getAddedDraw() { return addedDraw; }
+
+    public int getAddedBuys() { return addedBuys; }
+
+    public int getVictoryPoints() { return victoryPoints; }
 
     //Card Action Methods
     private static boolean festivalAction() {

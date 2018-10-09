@@ -7,7 +7,10 @@
       "cost": 5,
       "type": "ACTION",
       "amount": 10,
-      "action": "festivalAction"
+      "action": "festivalAction",
+      "addedActions": 2,
+      "addedBuys": 1,
+      "addedTreasure": 2
     },
     {
       "title": "Merchant",
@@ -16,12 +19,14 @@
       "cost": 3,
       "type": "ACTION",
       "amount": 10,
-      "action": "merchantAction"
+      "action": "merchantAction",
+      "addedCards": 1,
+      "addedActions": 1
     },
     {
       "title": "Remodel",
       "photoStringID": "dominion_remodel",
-      "text": "Trash a card from your hand. Gain a card mCosting up to 2 Gold more than it",
+      "text": "Trash a card from your hand. Gain a card costing up to 2 Gold more than it",
       "cost": 4,
       "type": "ACTION",
       "amount": 10,
@@ -39,7 +44,7 @@
     {
       "title": "Artisan",
       "photoStringID": "dominion_artisan",
-      "text": "Add a card to your hand mCosting up to 5 Gold. Put a card from your hand onto your deck",
+      "text": "Add a card to your hand costing up to 5 Gold. Put a card from your hand onto your deck",
       "cost": 6,
       "type": "ACTION",
       "amount": 10,
@@ -52,7 +57,8 @@
       "cost": 5,
       "type": "ATTACK",
       "amount": 10,
-      "action": "witchAction"
+      "action": "witchAction",
+      "addedCards": 2
     },
     {
       "title": "Library",
@@ -66,11 +72,13 @@
     {
       "title": "Laboratory",
       "photoStringID": "dominion_festival",
-      "text": "+2 Actions\n+1 Buy\n+2 Gold",
+      "text": "+2 Cards\n+1 Action",
       "cost": 5,
       "type": "ACTION",
       "amount": 10,
-      "action": "laboratoryAction"
+      "action": "laboratoryAction",
+      "addedCards": 2,
+      "addedActions": 1
     },
     {
       "title": "Militia",
@@ -79,7 +87,8 @@
       "cost": 4,
       "type": "ATTACK",
       "amount": 10,
-      "action": "militiaAction"
+      "action": "militiaAction",
+      "addedTreasure": 2
     },
     {
       "title": "Harbinger",
@@ -88,7 +97,9 @@
       "cost": 3,
       "type": "ACTION",
       "amount": 10,
-      "action": "harbingerAction"
+      "action": "harbingerAction",
+      "addedCards": 1,
+      "addedActions": 1
     }
   ]
 }

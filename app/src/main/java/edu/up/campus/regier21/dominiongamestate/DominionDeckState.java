@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 /**
  * Holds state information for a player's deck, including their draw and discard piles
- * @author Ryan Regier, Julian Donovan
+ * @author Ryan Regier, Julian Donovan, Hayden Liao
  */
 public class DominionDeckState {
 
@@ -147,12 +147,11 @@ public class DominionDeckState {
      * @return Number of victory points
      */
     public int countVictory(){
-        //TODO: Finish implementation by adding VP var for DominionCardState
-        /*Stream.of(discard.parallelStream(), hand.parallelStream(), discard.parallelStream())
+        int totalVictory = Stream.of(discard.parallelStream(), hand.parallelStream(), discard.parallelStream())
                 .flatMap(s -> s)
-                .filter(s -> s.getType().equals(DominionCardType.VICTORY))
-                .mapToInt(s -> s.get`)*/ //We don't have a VP var per card
-        return 0;
+                .mapToInt(s -> s.getVictoryPoints())
+                .sum();
+        return totalVictory;
     }
 
     @Override
