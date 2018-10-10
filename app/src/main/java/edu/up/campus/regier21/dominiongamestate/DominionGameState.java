@@ -182,39 +182,64 @@ public class DominionGameState {
 
     //Start of actions that can be performed by a player
 
-    public boolean revealCard(int playerID, DominionGameState card){
+    public boolean revealCard(int playerID){
+        if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
+            //Reveal card
+            return true;
+        }
         return false;
     }
 
-    public boolean discardCard(int playerID, DominionGameState card){
+    public boolean discardCard(int playerID){
+        if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
+            //Discard card
+            return true;
+        }
         return false;
     }
 
-    public boolean buyCard(int playerID, DominionGameState card){
+    public boolean buyCard(int playerID){
+        if(this.currentTurn == playerID) {
+            //Buy card
+            return true;
+        }
         return false;
     }
 
-    public boolean chooseCard(int playerID, DominionGameState card){
+    public boolean chooseCard(int playerID){
+        if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
+            //Choose card
+            return true;
+        }
         return false;
     }
 
     public boolean endTurn(int playerID){
+        if(this.currentTurn == playerID) {
+            //End turn
+            return true;
+        }
         return false;
     }
 
-    /*public boolean voteCards(int playerID){
-        return false;
-    }*/
-
-    public boolean gainCard(int playerID, DominionGameState card){
+    public boolean drawCard(int playerID){
+        if(this.currentTurn == playerID) {
+            //Draw card
+            return true;
+        }
         return false;
     }
 
     public boolean quit(int playerID){
-        return false;
+        //Quit game
+        return true;
     }
 
-    public boolean playCard(int playerID, DominionGameState card){
+    public boolean playCard(int playerID){
+        if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
+            //Play card
+            return true;
+        }
         return false;
     }
 

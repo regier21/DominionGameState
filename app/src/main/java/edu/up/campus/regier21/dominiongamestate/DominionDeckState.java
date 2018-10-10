@@ -25,6 +25,8 @@ public class DominionDeckState {
         hand = new ArrayList<>(10);
     }
 
+    public int getHandSize(){ return  hand.size(); }
+
     /**
      * Returns the top card from the draw pile, shuffling if necessary.
      * Revealed card remains at top of deck.
