@@ -25,11 +25,13 @@ public class DominionGameState {
      *  4: Gold
      *  5: Province
      */
+
+    //use these to create copy constructor
     protected static ArrayList<DominionShopPileState> baseCards;
     protected static ArrayList<DominionShopPileState> shopCards;
     protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
     protected int currentTurn;
-    protected int attackTurn;
+    protected int attackTurn; //player id of responder
     protected boolean isAttackTurn;
     protected boolean isGameOver;
 
@@ -39,10 +41,10 @@ public class DominionGameState {
 
     private int numVictory;
     private int emptyPiles;
-    private boolean provinceEmpty;
 
     private static DominionGameState instance;
 
+    //singleton, not staying
     public static void setupInstance(int numPlayers, ArrayList<DominionShopPileState> baseCards, ArrayList<DominionShopPileState> shopCards){
         instance = new DominionGameState(numPlayers, baseCards, shopCards);
     }
@@ -99,11 +101,10 @@ public class DominionGameState {
 
         this.isGameOver = false;
 
-        this.attackTurn = this.currentTurn;
+        this.attackTurn = this.currentTurn; //in the event of an attack
         this.isAttackTurn = false;
 
         emptyPiles = 0;
-        provinceEmpty = false;
     }
 
     /**
@@ -111,6 +112,7 @@ public class DominionGameState {
      * @return A deep copy of DominionGameState
      */
     //TODO: finish
+    //make this a constructor
     @Override
     protected DominionGameState clone() {
         DominionGameState clone = null;

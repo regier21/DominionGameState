@@ -22,7 +22,7 @@ public class DominionDeckState {
     public DominionDeckState(int startSize){
         draw = new ArrayList<>(startSize);
         discard = new ArrayList<>(startSize);
-        hand = new ArrayList<>(startSize);
+        hand = new ArrayList<>(10);
     }
 
     /**
