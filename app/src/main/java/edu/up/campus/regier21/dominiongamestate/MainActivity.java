@@ -11,11 +11,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    /*
-    TODO: External citation
-    Date: 10/3
-    Source: https://stackoverflow.com/questions/8355632/how-do-you-usually-tag-log-entries-android
-     */
+    /**
+     * External citation
+     * Date: 10/3
+     * Problem: Wanted tag for logger
+     * Resource:
+     *  https://stackoverflow.com/questions/8355632/how-do-you-usually-tag-log-entries-android
+     * Solution: Using class name as a tag
+     **/
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -36,12 +39,11 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate: " + baseCards.toString());
 
         //Instantiate a DominionGameState object to store all relevant game information
-        DominionGameState.setupInstance(4, baseCards, shopCards);
-        DominionGameState game = DominionGameState.getInstance();
+        DominionGameState game = new DominionGameState(4, baseCards, shopCards);
         Log.i(TAG, game.toString());
     }
 
-   private Button.OnClickListener buttonOnClickListener = (View v) -> {
+   private final Button.OnClickListener buttonOnClickListener = (View v) -> {
 
    };
 

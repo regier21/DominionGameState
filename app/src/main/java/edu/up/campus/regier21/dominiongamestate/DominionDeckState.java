@@ -3,21 +3,21 @@ package edu.up.campus.regier21.dominiongamestate;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Holds state information for a player's deck, including their draw and discard piles
+ * Holds state information for all cards a player posseses: draw, hand, and discard.
+ * Provides helper methods to automatically access these cards.
+ *
  * @author Ryan Regier, Julian Donovan, Hayden Liao
  */
 public class DominionDeckState {
 
-    private ArrayList<DominionCardState> draw;
-    private ArrayList<DominionCardState> discard;
-    private ArrayList<DominionCardState> hand;
+    private final ArrayList<DominionCardState> draw;
+    private final ArrayList<DominionCardState> discard;
+    private final ArrayList<DominionCardState> hand;
 
     public DominionDeckState(int startSize){
         draw = new ArrayList<>(startSize);
@@ -26,16 +26,18 @@ public class DominionDeckState {
     }
 
     /**
-     * Returns the top card from the draw pile, shuffling if necessary
+     * Returns the top card from the draw pile, shuffling if necessary.
+     * Revealed card remains at top of deck.
+     *
      * @return The revealed card, or null if deck is empty
      */
     public DominionCardState reveal(){
         if (draw.isEmpty()){
-            reshuffle();
-            if (draw.isEmpty()) {
+            if (discard.isEmpty()) {
                 //Empty deck, cannot reveal card
                 return null;
             }
+            reshuffle();
         }
 
         int index = draw.size() - 1;
@@ -45,21 +47,16 @@ public class DominionDeckState {
 
     /**
      * Removes the top card from the draw pile and returns it, shuffling if necessary.
+     * Adds drawn card to hand.
+     *
      * @return The drawn card, or null if deck is empty
      */
-    //TODO: Look at me
     public DominionCardState draw(){
-        if (draw.isEmpty()){
-            reshuffle();
-            if (draw.isEmpty()) {
-                //Empty deck, cannot draw card
-                return null;
-            }
-        }
-
-        int index = draw.size() - 1;
         DominionCardState card = reveal();
-        draw.remove(card);
+        if (card == null){
+            return null;
+        }
+        draw.remove(draw.size()-1);
         hand.add(card);
         return card;
     }
@@ -74,7 +71,7 @@ public class DominionDeckState {
 
     /**
      * Puts card in the discard pile.
-     * This card was previously drawn.
+     * This card will be removed from the hand, if it exists.
      * @param card The card to put in discard
      */
     public void discard(DominionCardState card){
@@ -84,7 +81,7 @@ public class DominionDeckState {
 
     /**
      * Adds a card to the discard pile.
-     * This card was not previously drawn.
+     *
      * @param card The new card
      */
     public void discardNew(DominionCardState card){
@@ -92,7 +89,8 @@ public class DominionDeckState {
     }
 
     /**
-     * Add many copies of a card to the discard pile
+     * Add many copies of a card to the discard pile.
+     * Used to create starter deck.
      * @param card Card to add
      * @param count Number of cards to add
      */
@@ -103,12 +101,10 @@ public class DominionDeckState {
     }
 
     /**
-     * Discards all cards that have been drawn and not yet discarded.
+     * Discards all cards in hand.
      */
     public void discardAll(){
-        for (DominionCardState card: hand){
-            discard.add(card);
-        }
+        discard.addAll(hand);
 
         hand.clear();
     }
@@ -150,7 +146,7 @@ public class DominionDeckState {
     public int countVictory(){
         return Stream.of(discard.parallelStream(), hand.parallelStream(), draw.parallelStream())
                 .flatMap(s -> s)
-                .mapToInt(s -> s.getVictoryPoints())
+                .mapToInt(DominionCardState::getVictoryPoints)
                 .sum();
     }
 
@@ -170,6 +166,13 @@ public class DominionDeckState {
                 TextUtils.join(",", handStr));
     }
 
+    /**
+     * Creates an array of Strings from an ArrayList of cards.
+     * Used for toString method to list cards in deck.
+     *
+     * @param array The array to store card titles in. Must be at least as big as {@code cards}
+     * @param cards The array of cards to read from.
+     */
     private void createCardArray(String[] array, ArrayList<DominionCardState> cards){
         for (int i = 0; i < array.length; i++){
             array[i] = cards.get(i).getTitle();

@@ -25,10 +25,12 @@ public class DominionGameState {
      *  4: Gold
      *  5: Province
      */
+    protected final ArrayList<DominionShopPileState> baseCards;
+    protected final ArrayList<DominionShopPileState> shopCards;
 
-    //use these to create copy constructor
-    protected static ArrayList<DominionShopPileState> baseCards;
-    protected static ArrayList<DominionShopPileState> shopCards;
+    private final int PILE_COPPER = 0;
+    private final int PILE_ESTATE = 1;
+
     protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
     protected int currentTurn;
     protected int attackTurn; //player id of responder
@@ -39,62 +41,43 @@ public class DominionGameState {
     protected int buys;
     protected int treasure;
 
-    private int numVictory; //TODO: make constant
+    //RULE: With 2 players, 8 of each victory card should exist
+    //      With 3-4 players, default to 12 copies of each victory card
+    private final int VICTORY_CARDS_2_PLAYER = 8;
+
     private int emptyPiles;
 
-    private static DominionGameState instance;
-
-    //singleton, not staying
-    public static void setupInstance(int numPlayers, ArrayList<DominionShopPileState> baseCards, ArrayList<DominionShopPileState> shopCards){
-        instance = new DominionGameState(numPlayers, baseCards, shopCards);
-    }
-
-    public static DominionGameState getInstance(){
-        return instance;
-    }
-
-    private DominionGameState(int numPlayers, ArrayList<DominionShopPileState> baseCardArray,
+    public DominionGameState(int numPlayers, ArrayList<DominionShopPileState> baseCardArray,
                               ArrayList<DominionShopPileState> shopCardArray) {
-
-        //RULE: With 2 players, 8 of each victory card should exist
-        //      With 3-4 players, default to 12 copies of each victory card
-        //TODO: make constant
-        if (numPlayers == 2) numVictory = 8;
-
-        //Generate shop
-        for (DominionShopPileState pile : baseCardArray) {
-            if (numVictory != 12 && pile.getCard().getType() == DominionCardType.VICTORY) {
-                pile.setAmount(8);
-                //A nice three step process for when Ryan doesn't like my code - 1:
-                //baseCards.add(new DominionShopPileState(pile.getCard(), numVictory));
+        //Updates shop amounts for 2 player game
+        if (numPlayers == 2) {
+            //Base cards
+            for (DominionShopPileState pile : baseCardArray) {
+                if (pile.getCard().getType() == DominionCardType.VICTORY) {
+                    pile.setAmount(VICTORY_CARDS_2_PLAYER);
+                }
             }
-            //Uncomment this - 2:
-            //else baseCards.add(pile);
-        }
-        //And comment this junk out - 3:
-        baseCards = baseCardArray;
 
-        //Handles victory point shop card edge case (ex. Gardens)
-        //TODO: skip loop if possible
-        for (DominionShopPileState pile : shopCardArray) {
-            if (numVictory != 12 && pile.getCard().getType() == DominionCardType.VICTORY) {
-                pile.setAmount(8);
-                //The same nice three step process for when Ryan doesn't like my code - 1:
-                //baseCards.add(new DominionShopPileState(pile.getCard(), numVictory));
+            //Shop cards (needed for Gardens)
+            for (DominionShopPileState pile : shopCardArray) {
+                if (pile.getCard().getType() == DominionCardType.VICTORY) {
+                    pile.setAmount(VICTORY_CARDS_2_PLAYER);
+                }
             }
-            //Uncomment this - 2:
-            //else baseCards.add(pile);
         }
-        //And comment this junk out - 3:
-        shopCards = shopCardArray;
 
+        this.baseCards = baseCardArray;
+        this.shopCards = shopCardArray;
+
+        //Create the players
         this.dominionPlayers = new DominionPlayerState[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
             this.dominionPlayers[i] = new DominionPlayerState("Player " + i,
-                    baseCards.get(0), //The copper pile
-                    baseCards.get(1).getCard()); //The estate card //TODO: make constants
+                    baseCards.get(PILE_COPPER), //The copper pile
+                    baseCards.get(PILE_ESTATE).getCard()); //The estate card
         }
 
+        //Sets up turn
         this.currentTurn = new Random().nextInt(numPlayers);
         this.treasure = 0;
         this.buys = 1;
@@ -105,7 +88,7 @@ public class DominionGameState {
         this.attackTurn = this.currentTurn; //in the event of an attack
         this.isAttackTurn = false;
 
-        emptyPiles = 0;
+        this.emptyPiles = 0;
     }
 
     /**
@@ -160,9 +143,12 @@ public class DominionGameState {
         }
 
         /**
-         * TODO
+         * External Citation
          * Date: 10/7
-         * Resource: https://stackoverflow.com/questions/1978933/a-quick-and-easy-way-to-join-array-elements-with-a-separator-the-opposite-of-sp
+         * Problem: Needed to turn array of strings into single array
+         * Resource:
+         *  https://stackoverflow.com/questions/1978933/a-quick-and-easy-way-to-join-array-elements-with-a-separator-the-opposite-of-sp
+         * Solution: Used built-in Android helper function
          */
         baseStr = String.format(Locale.US, "The base cards in the shop:\n%s",
                 TextUtils.join("\n", baseStrs));
@@ -193,6 +179,8 @@ public class DominionGameState {
                 baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr);
     }
 
+
+    //Start of actions that can be performed by a player
 
     public boolean revealCard(int playerID, DominionGameState card){
         return false;

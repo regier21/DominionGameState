@@ -14,7 +14,7 @@ public enum DominionCardType {
     /**
      * Parses a given string, converting its character value to a DominionCardType enum
      * @param typeName A String representing a DominionCardType enum
-     * @return A DominionCardType enum, describing card type
+     * @return A DominionCardType enum, describing card type, or null if type does not exist
      */
     public static DominionCardType getTypeFromString(String typeName){
         for (DominionCardType type : values()){

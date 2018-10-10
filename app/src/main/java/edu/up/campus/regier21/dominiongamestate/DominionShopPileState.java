@@ -3,11 +3,13 @@ package edu.up.campus.regier21.dominiongamestate;
 import java.util.Locale;
 
 /**
- * A data class intended to represent the state of a shop card pile object
+ * A data class intended to represent a pile of cards in the shop.
+ * Tracks card type and amount.
+ *
  * @author Ryan Regier, Julian Donovan
  */
 public class DominionShopPileState {
-    private DominionCardState card;
+    private final DominionCardState card;
     private int amount;
 
     public DominionShopPileState(DominionCardState card, int amount){

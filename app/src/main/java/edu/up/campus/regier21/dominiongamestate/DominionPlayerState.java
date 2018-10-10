@@ -5,14 +5,16 @@ package edu.up.campus.regier21.dominiongamestate;
  * @author Ryan Regier, Julian Donovan
  */
 public class DominionPlayerState {
-    protected String name;
-    protected DominionDeckState deck;
+
+    //Player fields. Note that victoryPoints is not accurate until end of game (gardens)
+    protected final String name;
+    protected final DominionDeckState deck;
     protected int victoryPoints;
 
     protected DominionPlayerState(String name, DominionShopPileState copper, DominionCardState estate) {
         this.name = name;
 
-        //Initializes player hand and deck, populating the deck's discard pile member variable
+        //Initializes player deck
         this.deck = new DominionDeckState(10);
         populateStartingDeck(copper, estate);
 
@@ -20,8 +22,10 @@ public class DominionPlayerState {
     }
 
     /**
-     * Populates deck's discard member variable with 7 copper and 3 estates, effectively prepping
-     * players' for the start of the game
+     * Populates deck's discard member variable with 7 copper and 3 estates for start of game.
+     * Removes copper from the pile used.
+     * Does not remove Estates.
+     *
      * @param copper A DominionCardState object containing data pertaining to the copper card
      * @param estate A DominionCardState object containing data pertaining to the estate card
      */

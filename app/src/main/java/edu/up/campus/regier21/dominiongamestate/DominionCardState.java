@@ -8,10 +8,14 @@ import java.lang.reflect.Method;
 import static android.content.ContentValues.TAG;
 
 /**
- * A data class intended to represent the state of a card object
+ * A data class intended to represent the state of a card object.
+ * Only one instance should be created per unique card.
+ *
  * @author Julian Donovan
  */
 public class DominionCardState {
+    //Card attributes
+    //Final because only one instance is made per card. Changing an attribute would change all copies
     private final String title;
     private final String photoID;
     private final String text;
@@ -24,6 +28,21 @@ public class DominionCardState {
     private final int addedBuys;
     private final int victoryPoints;
 
+    /**
+     * Constructor
+     *
+     * @param name The card name
+     * @param photoStringID The name of the drawable for the card art
+     * @param text The card description
+     * @param cost The cost of the card
+     * @param type The type of the card. Converted into DominionCardType - must match name exactly
+     * @param action The name of the function called when card is played.
+     * @param addedTreasure The treasure the card gives when played.
+     * @param addedActions The actions the card gives when played.
+     * @param addedDraw The cards drawn when played.
+     * @param addedBuys The buys the card gives when plays.
+     * @param victoryPoints The worth of the card in victory points.
+     */
     public DominionCardState (String name, String photoStringID, String text, int cost, String type, String action,
                               int addedTreasure, int addedActions, int addedDraw, int addedBuys, int victoryPoints){
         this.title = name;
@@ -34,6 +53,7 @@ public class DominionCardState {
         this.type = DominionCardType.getTypeFromString(type);
         if (this.type == null){
             Log.e(TAG, "Illegal type for card " + this.title);
+            throw new IllegalArgumentException("Card type does not exist.");
         }
 
         //Dynamically assigned by method reflection, allowing for a String method reference to be held in JSON
@@ -47,7 +67,7 @@ public class DominionCardState {
     }
 
     /**
-     * TODO: External citation
+     * External Citation
      * Date: 10/4
      * Source: https://stackoverflow.com/questions/13604111/final-variable-assignment-with-try-catch
      * Problem: wouldn't let action be assigned if final
@@ -55,8 +75,9 @@ public class DominionCardState {
      */
 
     /**
-     * Reflection wrapper, allowing for the string function reference as stored in JSON to be
-     * translated to the relevant function
+     * Gets function of this class corresponding to {@code action}.
+     * Used to load functions for card actions from JSON.
+
      * @param action A String name referencing the relevant DominionCardState function
      * @return A Method reference to a DominionCardState function
      */
@@ -65,8 +86,8 @@ public class DominionCardState {
             return DominionCardState.class.getDeclaredMethod(action);
         }
         catch (NoSuchMethodException e) {
-            Log.e(TAG, "Error encountered reflecting action method: " + e);
-            return null;
+            Log.e(TAG, "Error encountered reflecting action method: " + e + " with card " + this.title);
+            throw new IllegalArgumentException("Card function does not exist", e);
         }
     }
 
@@ -77,8 +98,8 @@ public class DominionCardState {
      */
     public boolean cardAction() {
         try {
-            action.invoke(this); //return state after it recognizes boolean nature
-            return true;
+            Boolean result = (Boolean) action.invoke(this); //return automatically boxed to Boolean
+            return result; //Note: automatically unboxed
         }
         catch (IllegalArgumentException e) {
             Log.e(TAG, "Illegal argument encountered when running reflected action method: " + e);
@@ -93,7 +114,9 @@ public class DominionCardState {
     }
 
     /**
-     * Overrides the default inherited toString() behavior, properly displaying object data
+     * Overrides the default inherited toString() behavior, properly displaying object data.
+     * Here for debug purposes, currently unused.
+     *
      * @return A String containing object type, title, photoId, text, cost, type, amount and action info
      */
     @Override
@@ -152,72 +175,82 @@ public class DominionCardState {
     public int getVictoryPoints() { return victoryPoints; }
 
     //Card Action Methods
-    //TODO: remove static
-    private static boolean festivalAction() {
+    private boolean festivalAction() {
         return true;
     }
 
-    private static boolean harbingerAction() {
+    private boolean harbingerAction() {
         return true;
     }
 
-    private static boolean merchantAction() {
+    private boolean merchantAction() {
         return true;
     }
 
-    private static boolean remodelAction() {
+    private boolean remodelAction() {
         return true;
     }
 
-    private static boolean throneAction() {
+    private boolean throneAction() {
         return true;
     }
 
-    private static boolean artisanAction() {
+    private boolean artisanAction() {
         return true;
     }
 
-    private static boolean witchAction() {
+    private boolean witchAction() {
         return true;
     }
 
-    private static boolean libraryAction() {
+    private boolean libraryAction() {
         return true;
     }
 
-    private static boolean laboratoryAction() {
+    private boolean laboratoryAction() {
         return true;
     }
 
-    private static boolean militiaAction() {
+    private boolean militiaAction() {
         return true;
     }
 
-    private static boolean copperAction() {
+    private boolean copperAction() {
         return true;
     }
 
-    private static boolean estateAction() {
+    private boolean estateAction() {
         return true;
     }
 
-    private static boolean silverAction() {
+    private boolean silverAction() {
         return true;
     }
 
-    private static boolean duchyAction() {
+    private boolean duchyAction() {
         return true;
     }
 
-    private static boolean goldAction() {
+    private boolean goldAction() {
         return true;
     }
 
-    private static boolean provinceAction() {
+    private boolean provinceAction() {
         return true;
     }
 
-    private static boolean basicAction(){
+    /**
+     * Special action.
+     * Used by any card whose action consists of only the following:
+     * <ul>
+     *     <li>Draw</li>
+     *     <li>Actions</li>
+     *     <li>Buys</li>
+     *     <li>Treasure</li>
+     * </ul>
+     * @return Action success
+     */
+    private boolean basicAction(){
         return true;
     }
 }
