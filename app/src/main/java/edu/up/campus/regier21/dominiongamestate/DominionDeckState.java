@@ -22,7 +22,7 @@ public class DominionDeckState {
     public DominionDeckState(int startSize){
         draw = new ArrayList<>(startSize);
         discard = new ArrayList<>(startSize);
-        hand = new ArrayList<>(startSize);
+        hand = new ArrayList<>(10);
     }
 
     /**
@@ -47,6 +47,7 @@ public class DominionDeckState {
      * Removes the top card from the draw pile and returns it, shuffling if necessary.
      * @return The drawn card, or null if deck is empty
      */
+    //TODO: Look at me
     public DominionCardState draw(){
         if (draw.isEmpty()){
             reshuffle();

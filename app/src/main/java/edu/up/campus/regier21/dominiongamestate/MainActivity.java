@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, game.toString());
     }
 
-   private Button.OnClickListener buttonOnClickListener = (View v) -> {};
+   private Button.OnClickListener buttonOnClickListener = (View v) -> {
+
+   };
 
 }

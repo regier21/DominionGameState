@@ -37,9 +37,8 @@ public class DominionGameState {
     protected int buys;
     protected int treasure;
 
-    private int numVictory;
+    private int numVictory; //TODO: make constant
     private int emptyPiles;
-    private boolean provinceEmpty;
 
     private static DominionGameState instance;
 
@@ -60,8 +59,8 @@ public class DominionGameState {
         if (numPlayers == 2) numVictory = 8;
 
         //Generate shop
-        for (DominionShopPileState pile : baseCardArray){
-            if (numVictory != 12 && pile.getCard().getType() == DominionCardType.VICTORY){
+        for (DominionShopPileState pile : baseCardArray) {
+            if (numVictory != 12 && pile.getCard().getType() == DominionCardType.VICTORY) {
                 pile.setAmount(8);
                 //A nice three step process for when Ryan doesn't like my code - 1:
                 //baseCards.add(new DominionShopPileState(pile.getCard(), numVictory));
@@ -73,8 +72,9 @@ public class DominionGameState {
         baseCards = baseCardArray;
 
         //Handles victory point shop card edge case (ex. Gardens)
-        for (DominionShopPileState pile : shopCardArray){
-            if (numVictory != 12 && pile.getCard().getType() == DominionCardType.VICTORY){
+        //TODO: skip loop if possible
+        for (DominionShopPileState pile : shopCardArray) {
+            if (numVictory != 12 && pile.getCard().getType() == DominionCardType.VICTORY) {
                 pile.setAmount(8);
                 //The same nice three step process for when Ryan doesn't like my code - 1:
                 //baseCards.add(new DominionShopPileState(pile.getCard(), numVictory));
@@ -87,9 +87,9 @@ public class DominionGameState {
 
         this.dominionPlayers = new DominionPlayerState[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
-            this.dominionPlayers[i] = new DominionPlayerState("Player "+i,
+            this.dominionPlayers[i] = new DominionPlayerState("Player " + i,
                     baseCards.get(0), //The copper pile
-                    baseCards.get(1).getCard()); //The estate card
+                    baseCards.get(1).getCard()); //The estate card //TODO: make constants
         }
 
         this.currentTurn = new Random().nextInt(numPlayers);
@@ -103,7 +103,6 @@ public class DominionGameState {
         this.isAttackTurn = false;
 
         emptyPiles = 0;
-        provinceEmpty = false;
     }
 
     /**
@@ -211,9 +210,9 @@ public class DominionGameState {
         return false;
     }
 
-    public boolean voteCards(int playerID){
+    /*public boolean voteCards(int playerID){
         return false;
-    }
+    }*/
 
     public boolean gainCard(int playerID, DominionGameState card){
         return false;

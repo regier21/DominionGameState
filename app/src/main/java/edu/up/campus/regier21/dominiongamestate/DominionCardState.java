@@ -152,6 +152,7 @@ public class DominionCardState {
     public int getVictoryPoints() { return victoryPoints; }
 
     //Card Action Methods
+    //TODO: remove static
     private static boolean festivalAction() {
         return true;
     }
