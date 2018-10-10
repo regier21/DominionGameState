@@ -147,11 +147,10 @@ public class DominionDeckState {
      * @return Number of victory points
      */
     public int countVictory(){
-        int totalVictory = Stream.of(discard.parallelStream(), hand.parallelStream(), discard.parallelStream())
+        return Stream.of(discard.parallelStream(), hand.parallelStream(), deck.parallelStream())
                 .flatMap(s -> s)
                 .mapToInt(s -> s.getVictoryPoints())
                 .sum();
-        return totalVictory;
     }
 
     @Override
