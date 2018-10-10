@@ -175,6 +175,21 @@ public class DominionCardState {
     public int getVictoryPoints() { return victoryPoints; }
 
     //Card Action Methods
+    /*
+    1. moat
+    2. market
+    3. laboratory
+    4. merchant
+    5. gardens
+    6. festival
+    7. smithy
+    8. village
+    9. counsel room
+    10. money lender(alpha)
+        //may trash a copper for 3
+    //discard a card per empty supply
+     */
+
     private boolean festivalAction() {
         return true;
     }
