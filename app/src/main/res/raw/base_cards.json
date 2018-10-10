@@ -16,7 +16,7 @@
       "text": "1 Victory Point",
       "cost": 2,
       "type": "VICTORY",
-      "amount": 24,
+      "amount": 12,
       "action": "estateAction",
       "victoryPoints": 1
     },
