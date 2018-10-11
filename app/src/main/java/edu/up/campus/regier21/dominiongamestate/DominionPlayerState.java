@@ -1,8 +1,10 @@
 package edu.up.campus.regier21.dominiongamestate;
 
+import java.util.ArrayList;
+
 /**
  * A data class intended to represent the state of a player object
- * @author Ryan Regier, Julian Donovan
+ * @author Ryan Regier, Julian Donovan, Ashika Mulagada, Hayden Liao
  */
 public class DominionPlayerState {
 
@@ -19,6 +21,16 @@ public class DominionPlayerState {
         populateStartingDeck(copper, estate);
 
         this.victoryPoints = 3;
+    }
+
+    protected DominionPlayerState(DominionPlayerState playerState){
+        this.name = playerState.name;
+        this.victoryPoints = playerState.victoryPoints;
+        //TODO: make deep copy constructor for DominionDeckState in order to deep copy the cards
+        this.deck = new DominionDeckState(playerState.deck.getDrawSize());
+        for(DominionCardState cardState: playerState.deck.getDraw()){
+            //this.deck.add(cardState);
+        }
     }
 
     /**
@@ -39,6 +51,8 @@ public class DominionPlayerState {
     public DominionDeckState getDeck() {
         return deck;
     }
+
+    public String getName() { return name; }
 
     /**
      * Overrides the default inherited toString() behavior, properly displaying object data

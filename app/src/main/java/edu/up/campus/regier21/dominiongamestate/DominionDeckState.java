@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  * Holds state information for all cards a player posseses: draw, hand, and discard.
  * Provides helper methods to automatically access these cards.
  *
- * @author Ryan Regier, Julian Donovan, Hayden Liao
+ * @author Ryan Regier, Julian Donovan, Hayden Liao, Ashika Mulagada
  */
 public class DominionDeckState {
 
@@ -24,6 +24,8 @@ public class DominionDeckState {
         discard = new ArrayList<>(startSize);
         hand = new ArrayList<>(10);
     }
+
+    //TODO: make deep copy constructor??
 
     public int getHandSize(){ return  hand.size(); }
 
@@ -179,5 +181,17 @@ public class DominionDeckState {
         for (int i = 0; i < array.length; i++){
             array[i] = cards.get(i).getTitle();
         }
+    }
+
+    public ArrayList<DominionCardState> getDraw() {
+        return draw;
+    }
+
+    public ArrayList<DominionCardState> getDiscard() {
+        return discard;
+    }
+
+    public ArrayList<DominionCardState> getHand() {
+        return hand;
     }
 }

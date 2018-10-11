@@ -96,26 +96,18 @@ public class DominionGameState {
 
     public DominionGameState(DominionGameState gameState){
         //this.baseCards = gameState.baseCards;
-        this.baseCards= new ArrayList<DominionShopPileState>();
-        this.shopCards= new ArrayList<DominionShopPileState>();
-
-        for(DominionShopPileState baseCard: gameState.baseCards){
-            this.baseCards.add(baseCard);
-        }
-
-        for(DominionShopPileState shopCard: gameState.shopCards){
-            this.shopCards.add(shopCard);
-        }
+        this.baseCards= new ArrayList<DominionShopPileState>(gameState.baseCards);
+        this.shopCards= new ArrayList<DominionShopPileState>(gameState.shopCards);
 
         this.numPlayers = gameState.numPlayers;
-
-
         this.dominionPlayers = new DominionPlayerState[this.numPlayers];
+
+        //copy each player including the deckstate
         for (int i = 0; i < this.numPlayers; i++) {
-            this.dominionPlayers[i] = new DominionPlayerState("Player " + i,
-                    baseCards.get(PILE_COPPER), //The copper pile
-                    baseCards.get(PILE_ESTATE).getCard()); //The estate card
+            this.dominionPlayers[i] = new DominionPlayerState(gameState.dominionPlayers[i]);
         }
+
+        //set victory points
         for(int i = 0; i < this.numPlayers; i++){
             this.dominionPlayers[i].victoryPoints = gameState.dominionPlayers[i].victoryPoints;
         }
@@ -128,24 +120,6 @@ public class DominionGameState {
         this.actions = gameState.actions;
         this.buys = gameState.buys;
         this.treasure = gameState.treasure;
-
-        /*
-
-
-    protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
-    protected int currentTurn;
-    protected int attackTurn; //player id of responder
-    protected boolean isAttackTurn;
-    protected boolean isGameOver;
-
-    protected int actions;
-    protected int buys;
-    protected int treasure;
-
-         */
-
-
-
     }
 
     /**
