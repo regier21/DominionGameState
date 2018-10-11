@@ -37,6 +37,8 @@ public class DominionGameState {
     protected boolean isAttackTurn;
     protected boolean isGameOver;
 
+    protected int numPlayers;
+
     protected int actions;
     protected int buys;
     protected int treasure;
@@ -47,9 +49,10 @@ public class DominionGameState {
 
     private int emptyPiles;
 
-    public DominionGameState(int numPlayers, ArrayList<DominionShopPileState> baseCardArray,
+    public DominionGameState(int paramNumPlayers, ArrayList<DominionShopPileState> baseCardArray,
                               ArrayList<DominionShopPileState> shopCardArray) {
         //Updates shop amounts for 2 player game
+        numPlayers = paramNumPlayers;
         if (numPlayers == 2) {
             //Base cards
             for (DominionShopPileState pile : baseCardArray) {
@@ -89,6 +92,60 @@ public class DominionGameState {
         this.isAttackTurn = false;
 
         this.emptyPiles = 0;
+    }
+
+    public DominionGameState(DominionGameState gameState){
+        //this.baseCards = gameState.baseCards;
+        this.baseCards= new ArrayList<DominionShopPileState>();
+        this.shopCards= new ArrayList<DominionShopPileState>();
+
+        for(DominionShopPileState baseCard: gameState.baseCards){
+            this.baseCards.add(baseCard);
+        }
+
+        for(DominionShopPileState shopCard: gameState.shopCards){
+            this.shopCards.add(shopCard);
+        }
+
+        this.numPlayers = gameState.numPlayers;
+
+
+        this.dominionPlayers = new DominionPlayerState[this.numPlayers];
+        for (int i = 0; i < this.numPlayers; i++) {
+            this.dominionPlayers[i] = new DominionPlayerState("Player " + i,
+                    baseCards.get(PILE_COPPER), //The copper pile
+                    baseCards.get(PILE_ESTATE).getCard()); //The estate card
+        }
+        for(int i = 0; i < this.numPlayers; i++){
+            this.dominionPlayers[i].victoryPoints = gameState.dominionPlayers[i].victoryPoints;
+        }
+
+        this.currentTurn = gameState.currentTurn;
+        this.attackTurn = gameState.attackTurn;
+        this.isAttackTurn = gameState.isAttackTurn;
+        this.isGameOver = gameState.isGameOver;
+
+        this.actions = gameState.actions;
+        this.buys = gameState.buys;
+        this.treasure = gameState.treasure;
+
+        /*
+
+
+    protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
+    protected int currentTurn;
+    protected int attackTurn; //player id of responder
+    protected boolean isAttackTurn;
+    protected boolean isGameOver;
+
+    protected int actions;
+    protected int buys;
+    protected int treasure;
+
+         */
+
+
+
     }
 
     /**

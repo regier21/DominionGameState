@@ -176,49 +176,29 @@ public class DominionCardState {
 
     //Card Action Methods
     /*
-    1. moat
-    2. market
-    3. laboratory
-    4. merchant
-    5. gardens
-    6. festival
-    7. smithy
-    8. village
-    9. counsel room
-    10. money lender(alpha)
-        //may trash a copper for 3
+    1. counsel room
+    2. festival
+    3. gardens
+    4. lab
+    5. market
+    6. merchant
+    7. moat
+    8. money lender
+    //may trash a copper for 3
     //discard a card per empty supply
+    9. smithy
+    10. village
      */
+
+    private boolean counselRoomAction() {
+        return true;
+    }
 
     private boolean festivalAction() {
         return true;
     }
 
-    private boolean harbingerAction() {
-        return true;
-    }
-
-    private boolean merchantAction() {
-        return true;
-    }
-
-    private boolean remodelAction() {
-        return true;
-    }
-
-    private boolean throneAction() {
-        return true;
-    }
-
-    private boolean artisanAction() {
-        return true;
-    }
-
-    private boolean witchAction() {
-        return true;
-    }
-
-    private boolean libraryAction() {
+    private boolean gardensAction() {
         return true;
     }
 
@@ -226,9 +206,53 @@ public class DominionCardState {
         return true;
     }
 
+    private boolean marketAction() {
+        return true;
+    }
+
+    private boolean merchantAction() {
+        return true;
+    }
+
+    private boolean moatAction() {
+        return true;
+    }
+
+    private boolean moneyLenderAction() {
+        return true;
+    }
+
+    private boolean smithyAction() {
+        return true;
+    }
+
+    private boolean VillageAction() {
+        return true;
+    }
+
+
+    //Harder actions that we will worry about implementing later
+    //////////////////////////////////////////////////////////////////////////////////////////
+    private boolean harbingerAction() {
+        return true;
+    }
+    private boolean remodelAction() { return true; }
+
+    private boolean throneAction() { return true; }
+
+    private boolean artisanAction() { return true; }
+
+    private boolean witchAction() { return true; }
+
+    private boolean libraryAction() {
+        return true;
+    }
     private boolean militiaAction() {
         return true;
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    //Supply Card Actions
 
     private boolean copperAction() {
         return true;

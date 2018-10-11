@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import android.util.Log;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +31,17 @@ public class MainActivity extends AppCompatActivity {
         Button runTestButton = findViewById(R.id.runButton);
         runTestButton.setOnClickListener(buttonOnClickListener);
     }
+
+    /*
+    private ArrayList<DominionShopPileState> deepCopyCards(ArrayList<DominionShopPileState> shopPileStates){
+        //ArrayList<DominionShopPileState> newShopPile =
+        for(DominionShopPileState card: shopPileStates){
+
+        }
+
+        //return;
+    }
+    */
 
    private final Button.OnClickListener buttonOnClickListener = (View v) -> {
        //Define a CardReader to deserialize shop_card.json data and base_card.json data to their respective object forms
@@ -75,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
        gameStateTest.concat("The two Witches selected are now being discarded. discardCard() " +
                "evaluates as " + firstInstance.discardCard(0));
 
-       gameStateTest.concat("Growing impatient as Player 2's turn drags on, Plauer 1 decides to " +
+       gameStateTest.concat("Growing impatient as Player 2's turn drags on, Player 1 decides to " +
                "quit. This runs " + firstInstance.quit(0));
 
        //Instantiate another DominionGameState object for comparison, as directed by the assignment
