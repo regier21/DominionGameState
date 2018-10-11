@@ -66,6 +66,30 @@ public class DominionCardState {
         this.victoryPoints = victoryPoints;
     }
 
+    //blank constructor
+    //TODO: this.photoID, this.type, this.action
+        //these fields currently have dummy values, so we don't get compiler errors
+    public DominionCardState(){
+        this.title = "Blank";
+        this.photoID = "bad string";
+        this.text = "Blank text";
+        this.cost = 0;
+        this.type = DominionCardType.getTypeFromString("Action");
+        if (this.type == null){
+            Log.e(TAG, "Illegal type for card " + this.title);
+            throw new IllegalArgumentException("Card type does not exist.");
+        }
+
+        //Dynamically assigned by method reflection, allowing for a String method reference to be held in JSON
+        this.action = getMethod("blankAction");
+
+        this.addedTreasure = 0;
+        this.addedActions = 0;
+        this.addedDraw = 0;
+        this.addedBuys = 0;
+        this.victoryPoints = 0;
+    }
+
     /**
      * External Citation
      * Date: 10/4
@@ -275,6 +299,10 @@ public class DominionCardState {
     }
 
     private boolean provinceAction() {
+        return true;
+    }
+
+    private boolean blankAction() {
         return true;
     }
 

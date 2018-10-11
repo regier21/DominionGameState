@@ -23,14 +23,10 @@ public class DominionPlayerState {
         this.victoryPoints = 3;
     }
 
-    protected DominionPlayerState(DominionPlayerState playerState){
+    protected DominionPlayerState(DominionPlayerState playerState, boolean isThisPlayer){
         this.name = playerState.name;
-        this.victoryPoints = playerState.victoryPoints;
-        //TODO: make deep copy constructor for DominionDeckState in order to deep copy the cards
-        this.deck = new DominionDeckState(playerState.deck.getDrawSize());
-        for(DominionCardState cardState: playerState.deck.getDraw()){
-            //this.deck.add(cardState);
-        }
+        if(isThisPlayer) this.victoryPoints = playerState.victoryPoints;
+        this.deck = new DominionDeckState(playerState.deck, isThisPlayer);
     }
 
     /**

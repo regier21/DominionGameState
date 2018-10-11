@@ -28,8 +28,8 @@ public class DominionGameState {
     protected final ArrayList<DominionShopPileState> baseCards;
     protected final ArrayList<DominionShopPileState> shopCards;
 
-    private final int PILE_COPPER = 0;
-    private final int PILE_ESTATE = 1;
+    private final int PILE_COPPER;
+    private final int PILE_ESTATE;
 
     protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
     protected int currentTurn;
@@ -51,6 +51,9 @@ public class DominionGameState {
 
     public DominionGameState(int paramNumPlayers, ArrayList<DominionShopPileState> baseCardArray,
                               ArrayList<DominionShopPileState> shopCardArray) {
+        PILE_COPPER = 0;
+        PILE_ESTATE = 1;
+
         //Updates shop amounts for 2 player game
         numPlayers = paramNumPlayers;
         if (numPlayers == 2) {
@@ -94,22 +97,22 @@ public class DominionGameState {
         this.emptyPiles = 0;
     }
 
-    public DominionGameState(DominionGameState gameState){
-        //this.baseCards = gameState.baseCards;
+    //obfuscated copy
+    public DominionGameState(DominionGameState gameState, DominionPlayerState playerState){
+        PILE_COPPER = 0;
+        PILE_ESTATE = 1;
+
         this.baseCards= new ArrayList<DominionShopPileState>(gameState.baseCards);
         this.shopCards= new ArrayList<DominionShopPileState>(gameState.shopCards);
 
         this.numPlayers = gameState.numPlayers;
         this.dominionPlayers = new DominionPlayerState[this.numPlayers];
 
-        //copy each player including the deckstate
+        //copy each player including the deckState
         for (int i = 0; i < this.numPlayers; i++) {
-            this.dominionPlayers[i] = new DominionPlayerState(gameState.dominionPlayers[i]);
-        }
-
-        //set victory points
-        for(int i = 0; i < this.numPlayers; i++){
-            this.dominionPlayers[i].victoryPoints = gameState.dominionPlayers[i].victoryPoints;
+            //if(i == playerState)
+            this.dominionPlayers[i] = new DominionPlayerState(gameState.dominionPlayers[i],
+                    gameState.currentTurn == i);
         }
 
         this.currentTurn = gameState.currentTurn;
@@ -120,28 +123,6 @@ public class DominionGameState {
         this.actions = gameState.actions;
         this.buys = gameState.buys;
         this.treasure = gameState.treasure;
-    }
-
-    /**
-     * Clones a DominionGameState, returning a deep copy
-     * @return A deep copy of DominionGameState
-     */
-    //TODO: finish
-    //make this a constructor
-    @Override
-    protected DominionGameState clone() {
-        DominionGameState clone = null;
-
-        try{
-            clone = (DominionGameState) super.clone();
-            clone.dominionPlayers = Arrays.copyOf(dominionPlayers, dominionPlayers.length);
-        }
-        catch(CloneNotSupportedException cnse) {
-            Log.e(TAG, "Error while cloning DominionGameState: ", cnse);
-            return null;
-        }
-
-        return clone;
     }
 
     /**
@@ -181,14 +162,14 @@ public class DominionGameState {
          *  https://stackoverflow.com/questions/1978933/a-quick-and-easy-way-to-join-array-elements-with-a-separator-the-opposite-of-sp
          * Solution: Used built-in Android helper function
          */
-        baseStr = String.format(Locale.US, "The base cards in the shop:\n%s",
+        baseStr = String.format(Locale.US, "\nThe base cards in the shop:\n%s",
                 TextUtils.join("\n", baseStrs));
 
         String[] shopStrs = new String[shopCards.size()];
         for (int i = 0; i < shopCards.size(); i++){
             shopStrs[i] = shopCards.get(i).toString();
         }
-        shopStr = String.format(Locale.US, "The kingdom cards in the shop:\n%s",
+        shopStr = String.format(Locale.US, "\nThe kingdom cards in the shop:\n%s",
                 TextUtils.join("\n", shopStrs));
 
         String[] playerStrs = new String[dominionPlayers.length];

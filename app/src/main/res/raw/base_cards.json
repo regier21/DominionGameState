@@ -59,6 +59,15 @@
       "amount": 12,
       "action": "provinceAction",
       "victoryPoints": 6
+    },
+    {
+      "title": "Blank",
+      "photoStringID": "dominion_save",
+      "text": "",
+      "cost": 0,
+      "type": "ACTION",
+      "amount": 0,
+      "action": "blankAction"
     }
   ]
 }

@@ -25,7 +25,30 @@ public class DominionDeckState {
         hand = new ArrayList<>(10);
     }
 
-    //TODO: make deep copy constructor??
+    public DominionDeckState(DominionDeckState deckState, boolean isRealDeck){
+
+        if(isRealDeck){
+            this.draw = new ArrayList<>(deckState.draw);
+            this.discard = new ArrayList<>(deckState.discard);
+            this.hand = new ArrayList<>(deckState.hand);
+        } else {
+            this.draw = new ArrayList<DominionCardState>();
+            this.discard = new ArrayList<DominionCardState>();
+            this.hand = new ArrayList<DominionCardState>();
+
+            //TODO: make this actually add blank cards
+            for(DominionCardState blankCard: deckState.draw){
+                this.draw.add(blankCard);
+            }
+            for(DominionCardState blankCard: deckState.discard){
+                this.discard.add(blankCard);
+            }
+            for(DominionCardState blankCard: deckState.hand){
+                this.hand.add(blankCard);
+            }
+        }
+    }
+
 
     public int getHandSize(){ return  hand.size(); }
 
@@ -154,6 +177,19 @@ public class DominionDeckState {
                 .sum();
     }
 
+    /**
+     * Creates an array of Strings from an ArrayList of cards.
+     * Used for toString method to list cards in deck.
+     *
+     * @param array The array to store card titles in. Must be at least as big as {@code cards}
+     * @param cards The array of cards to read from.
+     */
+    private void createCardArray(String[] array, ArrayList<DominionCardState> cards){
+        for (int i = 0; i < array.length; i++){
+            array[i] = cards.get(i).getTitle();
+        }
+    }
+
     @Override
     public String toString(){
 
@@ -166,21 +202,8 @@ public class DominionDeckState {
         createCardArray(handStr, hand);
 
         return String.format(Locale.US, "Deck\n\tDraw: %s\n\tDiscard: %s\n\tHand: %s",
-                TextUtils.join(",", drawStr), TextUtils.join(",", discardStr),
-                TextUtils.join(",", handStr));
-    }
-
-    /**
-     * Creates an array of Strings from an ArrayList of cards.
-     * Used for toString method to list cards in deck.
-     *
-     * @param array The array to store card titles in. Must be at least as big as {@code cards}
-     * @param cards The array of cards to read from.
-     */
-    private void createCardArray(String[] array, ArrayList<DominionCardState> cards){
-        for (int i = 0; i < array.length; i++){
-            array[i] = cards.get(i).getTitle();
-        }
+                TextUtils.join(", ", drawStr), TextUtils.join(", ", discardStr),
+                TextUtils.join(", ", handStr));
     }
 
     public ArrayList<DominionCardState> getDraw() {
