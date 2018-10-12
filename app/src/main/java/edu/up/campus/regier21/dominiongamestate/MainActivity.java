@@ -33,32 +33,18 @@ public class MainActivity extends AppCompatActivity {
         runTestButton.setOnClickListener(buttonOnClickListener);
     }
 
-    /*
-    private ArrayList<DominionShopPileState> deepCopyCards(ArrayList<DominionShopPileState> shopPileStates){
-        //ArrayList<DominionShopPileState> newShopPile =
-        for(DominionShopPileState card: shopPileStates){
-
-        }
-
-        //return;
-    }
-    */
-
    private final Button.OnClickListener buttonOnClickListener = (View v) -> {
        //Define a CardReader to deserialize shop_card.json data and base_card.json data to their respective object forms
        CardReader reader = new CardReader("base");
        ArrayList<DominionShopPileState> shopCards = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
-       Log.i(TAG, "onCreate: " + shopCards.toString()); //TODO: Remove this when finished below
 
        ArrayList<DominionShopPileState> baseCards = reader.generateCards(getApplicationContext(), R.raw.base_cards);
-       Log.i(TAG, "onCreate: " + baseCards.toString()); //TODO: Remove this when finished below
 
        TextView editText = findViewById(R.id.editText);
        editText.setText("");
 
        //Instantiate a DominionGameState object to store all relevant game information
        DominionGameState firstInstance = new DominionGameState(4, baseCards, shopCards);
-       Log.i(TAG, firstInstance.toString()); //TODO: Remove this when finished below
        DominionGameState secondInstance = new DominionGameState(firstInstance, firstInstance.dominionPlayers[0]);
         //COMMENT FOR THE GRADER: dominionPlayers[0] is "player 1"
 
@@ -68,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
        gameStateTest = gameStateTest.concat("FIRST INSTANCE:\n" + firstInstance.toString() + "\n");
 
        gameStateTest = gameStateTest.concat("Player 1's turn has just began. They decide to play a Moat. playCard() " +
-               "runs " + firstInstance.playCard(0) + ".\n"); //TODO: why does this run false?
+               "runs " + firstInstance.playCard(0) + ".\n");
 
        gameStateTest = gameStateTest.concat("The Moat triggers its draw effect as " + firstInstance.drawCard(0)
                + " granting Player 1 two more cards.\n");
@@ -100,11 +86,11 @@ public class MainActivity extends AppCompatActivity {
 
        String str2 = secondInstance.toString();
        String str4 = fourthInstance.toString();
-       if(str2.equals(str4)){ gameStateTest = gameStateTest.concat("secondInstance and fourthInstance are identical.\n"); }
-       else { gameStateTest = gameStateTest.concat("secondInstance and fourthInstance are not identical.\n"); }
+       if(str2.equals(str4)){ gameStateTest = gameStateTest.concat("\nsecondInstance and fourthInstance are identical.\n"); }
+       else { gameStateTest = gameStateTest.concat("\nsecondInstance and fourthInstance are not identical.\n"); }
 
        gameStateTest = gameStateTest.concat("SECOND INSTANCE\n" + secondInstance.toString());
-       gameStateTest = gameStateTest.concat("FOURTH INSTANCE\n" + fourthInstance.toString());
+       gameStateTest = gameStateTest.concat("\nFOURTH INSTANCE\n" + fourthInstance.toString());
 
        editText.setText(gameStateTest);
        //TODO: Write to textView and verify that everything works as specified

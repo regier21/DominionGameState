@@ -31,13 +31,22 @@ public class DominionDeckState {
             this.draw = new ArrayList<>(deckState.draw);
             this.discard = new ArrayList<>(deckState.discard);
             this.hand = new ArrayList<>(deckState.hand);
+
+            /*
+            this.draw.addAll(deckState.draw);
+            this.discard.addAll(deckState.discard);
+            this.hand.addAll(deckState.hand);
+            */
+
         } else {
             this.draw = new ArrayList<DominionCardState>();
             this.discard = new ArrayList<DominionCardState>();
             this.hand = new ArrayList<DominionCardState>();
 
-            //TODO: make this actually add blank cards
+            //TODO: make sure this actually adds blank cards
             for(DominionCardState blankCard: deckState.draw){
+                this.draw.add(DominionCardState());
+                //TODO: START HERE
                 this.draw.add(blankCard);
             }
             for(DominionCardState blankCard: deckState.discard){
@@ -48,7 +57,6 @@ public class DominionDeckState {
             }
         }
     }
-
 
     public int getHandSize(){ return  hand.size(); }
 

@@ -83,8 +83,8 @@ public class DominionGameState {
                     baseCards.get(PILE_ESTATE).getCard()); //The estate card
         }
 
-        //Sets up turn
-        this.currentTurn = new Random().nextInt(numPlayers);
+        //Sets up turn with player 0 as first player
+        this.currentTurn = 0;
         this.treasure = 0;
         this.buys = 1;
         this.actions = 1;
@@ -114,7 +114,6 @@ public class DominionGameState {
             this.dominionPlayers[i] = new DominionPlayerState(gameState.dominionPlayers[i],
                     gameState.currentTurn == i);
         }
-
         this.currentTurn = gameState.currentTurn;
         this.attackTurn = gameState.attackTurn;
         this.isAttackTurn = gameState.isAttackTurn;
