@@ -63,9 +63,9 @@
     {
       "title": "Blank",
       "photoStringID": "dominion_save",
-      "text": "",
+      "text": "Blank text",
       "cost": 0,
-      "type": "ACTION",
+      "type": "BLANK",
       "amount": 0,
       "action": "blankAction"
     }

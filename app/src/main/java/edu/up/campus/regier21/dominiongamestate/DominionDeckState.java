@@ -45,15 +45,15 @@ public class DominionDeckState {
 
             //TODO: make sure this actually adds blank cards
             for(DominionCardState blankCard: deckState.draw){
-                this.draw.add(DominionCardState());
-                //TODO: START HERE
-                this.draw.add(blankCard);
+                this.draw.add(new DominionCardState());
             }
             for(DominionCardState blankCard: deckState.discard){
                 this.discard.add(blankCard);
+                this.draw.add(new DominionCardState());
             }
             for(DominionCardState blankCard: deckState.hand){
                 this.hand.add(blankCard);
+                this.draw.add(new DominionCardState());
             }
         }
     }
