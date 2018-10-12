@@ -41,7 +41,7 @@ public class DominionPlayerState {
         deck.addManyToDiscard(copper.getCard(), 7);
         copper.removeAmount(7); //Removes 7 copper from the base card's draw pile
         deck.addManyToDiscard(estate, 3);
-        deck.reshuffle(); //
+        //deck.reshuffle();
     }
 
     public DominionDeckState getDeck() {

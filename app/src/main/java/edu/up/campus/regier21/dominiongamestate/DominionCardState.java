@@ -11,7 +11,7 @@ import static android.content.ContentValues.TAG;
  * A data class intended to represent the state of a card object.
  * Only one instance should be created per unique card.
  *
- * @author Julian Donovan
+ * @author Julian Donovan, Hayden Liao, Ashika Mulagada
  */
 public class DominionCardState {
     //Card attributes
@@ -67,18 +67,13 @@ public class DominionCardState {
     }
 
     //blank constructor
-    //TODO: this.photoID, this.type, this.action
         //these fields currently have dummy values, so we don't get compiler errors
     public DominionCardState(){
         this.title = "Blank";
-        this.photoID = "bad string";
+        this.photoID = null;
         this.text = "Blank text";
         this.cost = 0;
-        this.type = DominionCardType.getTypeFromString("Action");
-        if (this.type == null){
-            Log.e(TAG, "Illegal type for card " + this.title);
-            throw new IllegalArgumentException("Card type does not exist.");
-        }
+        this.type = DominionCardType.BLANK;
 
         //Dynamically assigned by method reflection, allowing for a String method reference to be held in JSON
         this.action = getMethod("blankAction");

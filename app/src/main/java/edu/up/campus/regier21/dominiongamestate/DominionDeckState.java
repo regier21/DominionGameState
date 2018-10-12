@@ -43,7 +43,6 @@ public class DominionDeckState {
             this.discard = new ArrayList<DominionCardState>();
             this.hand = new ArrayList<DominionCardState>();
 
-            //TODO: make sure this actually adds blank cards
             for(DominionCardState blankCard: deckState.draw){
                 this.draw.add(new DominionCardState());
             }

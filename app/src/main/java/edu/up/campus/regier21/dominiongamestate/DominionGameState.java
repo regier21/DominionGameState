@@ -12,7 +12,7 @@ import static android.content.ContentValues.TAG;
 
 /**
  * A data class intended to represent the state of a game object
- * @author Ryan Regier, Julian Donovan, Ashika Mulgada, Hayden Liao
+ * @author Ryan Regier, Julian Donovan, Ashika Mulagada, Hayden Liao
  */
 public class DominionGameState {
 
@@ -102,8 +102,16 @@ public class DominionGameState {
         PILE_COPPER = 0;
         PILE_ESTATE = 1;
 
-        this.baseCards= new ArrayList<DominionShopPileState>(gameState.baseCards);
-        this.shopCards= new ArrayList<DominionShopPileState>(gameState.shopCards);
+        this.baseCards= new ArrayList<DominionShopPileState>();
+        this.shopCards= new ArrayList<DominionShopPileState>();
+
+        for(DominionShopPileState basePileState: gameState.baseCards){
+            this.baseCards.add(new DominionShopPileState(basePileState));
+        }
+
+        for(DominionShopPileState shopPileState: gameState.shopCards){
+            this.baseCards.add(new DominionShopPileState(shopPileState));
+        }
 
         this.numPlayers = gameState.numPlayers;
         this.dominionPlayers = new DominionPlayerState[this.numPlayers];
@@ -130,7 +138,8 @@ public class DominionGameState {
      * @param playerID PlayerID in question, for which data will be found
      */
     protected void hideInformation(DominionGameState state, int playerID){
-        //TODO
+        //COMMENT FOR THE GRADER: functionality wrapped into copy constructor.
+            //not deleting with intention of (maybe?) implementing this later.
     }
 
     @Override

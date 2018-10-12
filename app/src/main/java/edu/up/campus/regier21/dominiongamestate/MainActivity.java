@@ -11,8 +11,11 @@ import android.widget.TextView;
 import java.sql.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * @author Julian Donovan, Hayden Liao, Ashika Mulagada, Ryan Regier
+ */
 
+public class MainActivity extends AppCompatActivity {
     /**
      * External citation
      * Date: 10/3
@@ -36,21 +39,21 @@ public class MainActivity extends AppCompatActivity {
    private final Button.OnClickListener buttonOnClickListener = (View v) -> {
        //Define a CardReader to deserialize shop_card.json data and base_card.json data to their respective object forms
        CardReader reader = new CardReader("base");
-       ArrayList<DominionShopPileState> shopCards = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
+       ArrayList<DominionShopPileState> shopCards1 = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
 
-       ArrayList<DominionShopPileState> baseCards = reader.generateCards(getApplicationContext(), R.raw.base_cards);
+       ArrayList<DominionShopPileState> baseCards1 = reader.generateCards(getApplicationContext(), R.raw.base_cards);
 
        TextView editText = findViewById(R.id.editText);
        editText.setText("");
 
        //Instantiate a DominionGameState object to store all relevant game information
-       DominionGameState firstInstance = new DominionGameState(4, baseCards, shopCards);
+       DominionGameState firstInstance = new DominionGameState(4, baseCards1, shopCards1);
        DominionGameState secondInstance = new DominionGameState(firstInstance, firstInstance.dominionPlayers[0]);
         //COMMENT FOR THE GRADER: dominionPlayers[0] is "player 1"
 
        //Recording "functionality" of game actions
-       String gameStateTest = shopCards.toString() + "\n";
-       gameStateTest = gameStateTest.concat(baseCards.toString()) + "\n";
+       String gameStateTest = shopCards1.toString() + "\n";
+       gameStateTest = gameStateTest.concat(baseCards1.toString()) + "\n";
        gameStateTest = gameStateTest.concat("FIRST INSTANCE:\n" + firstInstance.toString() + "\n");
 
        gameStateTest = gameStateTest.concat("Player 1's turn has just began. They decide to play a Moat. playCard() " +
@@ -78,8 +81,12 @@ public class MainActivity extends AppCompatActivity {
        gameStateTest = gameStateTest.concat("Growing impatient as Player 2's turn drags on, Player 1 decides to " +
                "quit. This runs " + firstInstance.quit(0) + "\n");
 
+       ArrayList<DominionShopPileState> shopCards2 = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
+
+       ArrayList<DominionShopPileState> baseCards2 = reader.generateCards(getApplicationContext(), R.raw.base_cards);
+
        //Instantiate another DominionGameState object for comparison, as directed by the assignment
-       DominionGameState thirdInstance = new DominionGameState(4, baseCards, shopCards);
+       DominionGameState thirdInstance = new DominionGameState(4, baseCards2, shopCards2);
        Log.i(TAG, firstInstance.toString());
 
        DominionGameState fourthInstance = new DominionGameState(thirdInstance, thirdInstance.dominionPlayers[0]);
@@ -93,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
        gameStateTest = gameStateTest.concat("\nFOURTH INSTANCE\n" + fourthInstance.toString());
 
        editText.setText(gameStateTest);
-       //TODO: Write to textView and verify that everything works as specified
    };
 
 }
