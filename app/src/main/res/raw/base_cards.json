@@ -7,7 +7,7 @@
       "cost": 0,
       "type": "TREASURE",
       "amount": 60,
-      "action": "copperAction",
+      "action": "baseAction",
       "addedTreasure": 1
     },
     {
@@ -17,7 +17,7 @@
       "cost": 2,
       "type": "VICTORY",
       "amount": 12,
-      "action": "estateAction",
+      "action": "baseAction",
       "victoryPoints": 1
     },
     {
@@ -37,7 +37,7 @@
       "cost": 5,
       "type": "VICTORY",
       "amount": 12,
-      "action": "duchyAction",
+      "action": "baseAction",
       "victoryPoints": 3
     },
     {
@@ -47,7 +47,7 @@
       "cost": 6,
       "type": "TREASURE",
       "amount": 30,
-      "action": "goldAction",
+      "action": "baseAction",
       "addedTreasure": 3
     },
     {
@@ -57,7 +57,7 @@
       "cost": 0,
       "type": "TREASURE",
       "amount": 12,
-      "action": "provinceAction",
+      "action": "baseAction",
       "victoryPoints": 6
     }
   ]

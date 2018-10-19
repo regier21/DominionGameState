@@ -1,16 +1,38 @@
 {
   "base": [
     {
-      "title": "Festival",
-      "photoStringID": "dominion_festival",
-      "text": "+2 Actions\n+1 Buy\n+2 Gold",
+      "title": "Moat",
+      "photoStringID": "dominion_moat",
+      "text": "+2 Cards\nWhen another player plays an Attack card, you may first reveal this from your hand to be unaffected by it",
+      "cost": 2,
+      "type": "ACTION",
+      "amount": 10,
+      "action": "moatAction",
+      "addedDraw": 2
+    },
+    {
+      "title": "Market",
+      "photoStringID": "dominion_market",
+      "text": "+1 Card\n+1 Action\n+1 Buy\n+1 Gold",
       "cost": 5,
       "type": "ACTION",
       "amount": 10,
-      "action": "festivalAction",
-      "addedActions": 2,
+      "action": "marketAction",
+      "addedCards": 1,
+      "addedActions": 1,
       "addedBuys": 1,
-      "addedTreasure": 2
+      "addedTreasure": 1
+    },
+    {
+      "title": "Laboratory",
+      "photoStringID": "dominion_festival",
+      "text": "+2 Cards\n+1 Action",
+      "cost": 5,
+      "type": "ACTION",
+      "amount": 10,
+      "action": "laboratoryAction",
+      "addedCards": 2,
+      "addedActions": 1
     },
     {
       "title": "Merchant",
@@ -23,6 +45,70 @@
       "addedCards": 1,
       "addedActions": 1
     },
+    {
+      "title": "Gardens",
+      "photoStringID": "dominion_gardens",
+      "text": "Worth 1 Victory Point per 10 cards you have, rounded down",
+      "cost": 4,
+      "type": "VICTORY",
+      "amount": 10,
+      "action": "gardensAction"
+    },
+    {
+      "title": "Festival",
+      "photoStringID": "dominion_festival",
+      "text": "+2 Actions\n+1 Buy\n+2 Gold",
+      "cost": 5,
+      "type": "ACTION",
+      "amount": 10,
+      "action": "festivalAction",
+      "addedActions": 2,
+      "addedBuys": 1,
+      "addedTreasure": 2
+    },
+    {
+      "title": "Smithy",
+      "photoStringID": "dominion_smithy",
+      "text": "+3 cards",
+      "cost": 4,
+      "type": "ACTION",
+      "amount": 10,
+      "action": "smithyAction",
+      "addedDraw": 3
+    },
+    {
+      "title": "Village",
+      "photoStringID": "dominion_village",
+      "text": "+1 Card\n+2 Actions",
+      "cost": 3,
+      "type": "ACTION",
+      "amount": 10,
+      "action": "villageAction",
+      "addedDraw": 1,
+      "addedActions": 2
+    },
+    {
+      "title": "Council Room",
+      "photoStringID": "dominion_council_room",
+      "text": "+4 Cards\n+1 Buy\nEach other player draws a card",
+      "cost": 5,
+      "type": "ACTION",
+      "amount": 10,
+      "action": "councilRoomAction",
+      "addedDraw": 4,
+      "addedBuys": 1
+    },
+    {
+      "title": "Moneylender",
+      "photoStringID": "dominion_moneylender",
+      "text": "You may trash a Copper from your hand for +3 Gold",
+      "cost": 4,
+      "type": "ACTION",
+      "amount": 10,
+      "action": "moneylenderAction"
+    }
+  ],
+  "temp": [
     {
       "title": "Remodel",
       "photoStringID": "dominion_remodel",
@@ -68,17 +154,6 @@
       "type": "ACTION",
       "amount": 10,
       "action": "libraryAction"
-    },
-    {
-      "title": "Laboratory",
-      "photoStringID": "dominion_festival",
-      "text": "+2 Cards\n+1 Action",
-      "cost": 5,
-      "type": "ACTION",
-      "amount": 10,
-      "action": "laboratoryAction",
-      "addedCards": 2,
-      "addedActions": 1
     },
     {
       "title": "Militia",

@@ -96,9 +96,9 @@ public class DominionCardState {
      * their action instance variable. Handles common Method errors.
      * @return A boolean regarding the success of the action invocation
      */
-    public boolean cardAction() {
+    public boolean cardAction(DominionGameState game) {
         try {
-            Boolean result = (Boolean) action.invoke(this); //return automatically boxed to Boolean
+            Boolean result = (Boolean) action.invoke(this, game); //return automatically boxed to Boolean
             return result; //Note: automatically unboxed
         }
         catch (IllegalArgumentException e) {
@@ -132,7 +132,7 @@ public class DominionCardState {
                 "\taddedActions: " + getAddedActions() + ",\n" +
                 "\taddedDraw: " + getAddedDraw() + ",\n" +
                 "\taddedBuys: " + getAddedBuys() + ",\n" +
-                "\tvictoryPoints: " + getVictoryPoints() + ",\n" +
+                "\tvictoryPoints: " + getVictoryPoints(0) + ",\n" +
                 "},";
     }
 
@@ -172,7 +172,10 @@ public class DominionCardState {
 
     public int getAddedBuys() { return addedBuys; }
 
-    public int getVictoryPoints() { return victoryPoints; }
+    public int getVictoryPoints(int totalCards) {
+        if(title.equals("Gardens")) return totalCards/10;
+        return victoryPoints;
+    }
 
     //Card Action Methods
     /*
@@ -184,74 +187,66 @@ public class DominionCardState {
     6. festival
     7. smithy
     8. village
-    9. counsel room
+    9. council room
     10. money lender(alpha)
         //may trash a copper for 3
     //discard a card per empty supply
      */
 
-    private boolean festivalAction() {
+    //If no special behavior is added to "return basicAction(game) methods
+    //replace their JSON method reference with basicAction
+    private boolean moatAction(DominionGameState game) {
+        return basicAction(game);
+    }
+
+    private boolean marketAction(DominionGameState game) {
+        return basicAction(game);
+    }
+
+    private boolean laboratoryAction(DominionGameState game) {
+        return basicAction(game);
+    }
+
+    private boolean merchantAction(DominionGameState game) {
+        game.dominionPlayers[game.currentTurn].silverBoon = true; //The first Silver played is worth one more
+        return basicAction(game);
+    }
+
+    private boolean gardensAction(DominionGameState game) {
+        //No action required, however a special tracking implementation must be added to the vp counting method
         return true;
     }
 
-    private boolean harbingerAction() {
-        return true;
+    private boolean festivalAction(DominionGameState game) {
+        return basicAction(game);
     }
 
-    private boolean merchantAction() {
-        return true;
+    private boolean smithyAction(DominionGameState game) {
+        return basicAction(game);
     }
 
-    private boolean remodelAction() {
-        return true;
+    private boolean villageAction(DominionGameState game) {
+        return basicAction(game);
     }
 
-    private boolean throneAction() {
-        return true;
+    private boolean councilRoomAction(DominionGameState game) {
+        for(int i = 0; i < game.dominionPlayers.length; i++) {
+            if(i != game.currentTurn) game.dominionPlayers[i].getDeck().draw();
+        }
+        return basicAction(game);
     }
 
-    private boolean artisanAction() {
-        return true;
+    private boolean moneylenderAction(DominionGameState game) {
+        if(game.dominionPlayers[game.currentTurn].getDeck().discard("Copper")) {
+            game.treasure += 3;
+            return true;
+        }
+        return false;
     }
 
-    private boolean witchAction() {
-        return true;
-    }
-
-    private boolean libraryAction() {
-        return true;
-    }
-
-    private boolean laboratoryAction() {
-        return true;
-    }
-
-    private boolean militiaAction() {
-        return true;
-    }
-
-    private boolean copperAction() {
-        return true;
-    }
-
-    private boolean estateAction() {
-        return true;
-    }
-
-    private boolean silverAction() {
-        return true;
-    }
-
-    private boolean duchyAction() {
-        return true;
-    }
-
-    private boolean goldAction() {
-        return true;
-    }
-
-    private boolean provinceAction() {
-        return true;
+    private boolean silverAction(DominionGameState game) {
+        if(game.dominionPlayers[game.currentTurn].silverBoon) game.treasure += 1; //Handles merchant silver boon
+        return basicAction(game);
     }
 
     /**
@@ -265,7 +260,12 @@ public class DominionCardState {
      * </ul>
      * @return Action success
      */
-    private boolean basicAction(){
+    private boolean basicAction(DominionGameState game){
+        DominionPlayerState currentPlayer = game.dominionPlayers[game.currentTurn];
+        currentPlayer.getDeck().drawMultiple(this.addedDraw);
+        game.actions += this.addedActions;
+        game.buys += this.addedBuys;
+        game.treasure += this.addedTreasure;
         return true;
     }
 }

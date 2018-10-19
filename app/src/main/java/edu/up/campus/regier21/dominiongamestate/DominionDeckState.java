@@ -63,6 +63,12 @@ public class DominionDeckState {
         return card;
     }
 
+    public DominionCardState[] drawMultiple(int drawNum){
+        DominionCardState[] drawnCards = new DominionCardState[drawNum];
+        for(int i = 0; i < drawNum; i++) drawnCards[i] = draw();
+        return drawnCards;
+    }
+
     /**
      * Gets the number of cards left in the draw pile
      * @return Number of cards in draw pile
@@ -79,6 +85,17 @@ public class DominionDeckState {
     public void discard(DominionCardState card){
         discard.add(card);
         hand.remove(card);
+    }
+
+    public boolean discard(String cardName){
+        for(DominionCardState card : hand){
+           if(card.getTitle().equals(cardName)) {
+               discard.add(card);
+               hand.remove(card);
+               return true;
+           }
+        }
+        return false;
     }
 
     /**
@@ -141,14 +158,19 @@ public class DominionDeckState {
         Collections.shuffle(draw);
     }
 
+    public int getTotalCards(){
+        return getDiscardSize() + getHandSize() + getDrawSize();
+    }
+
     /**
      * Counts deck for number of victory points
      * @return Number of victory points
      */
     public int countVictory(){
+        int totalCards = getTotalCards();
         return Stream.of(discard.parallelStream(), hand.parallelStream(), draw.parallelStream())
                 .flatMap(s -> s)
-                .mapToInt(DominionCardState::getVictoryPoints)
+                .mapToInt(s -> s.getVictoryPoints(totalCards))
                 .sum();
     }
 

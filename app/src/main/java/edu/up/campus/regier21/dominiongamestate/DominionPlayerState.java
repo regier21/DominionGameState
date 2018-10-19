@@ -10,6 +10,7 @@ public class DominionPlayerState {
     protected final String name;
     protected final DominionDeckState deck;
     protected int victoryPoints;
+    protected boolean silverBoon; //Set to false each turn
 
     protected DominionPlayerState(String name, DominionShopPileState copper, DominionCardState estate) {
         this.name = name;
@@ -19,6 +20,7 @@ public class DominionPlayerState {
         populateStartingDeck(copper, estate);
 
         this.victoryPoints = 3;
+        this.silverBoon = false;
     }
 
     /**
