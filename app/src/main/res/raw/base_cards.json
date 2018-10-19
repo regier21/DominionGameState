@@ -59,6 +59,15 @@
       "amount": 12,
       "action": "baseAction",
       "victoryPoints": 6
+    },
+    {
+      "title": "Blank",
+      "photoStringID": "dominion_save",
+      "text": "Blank text",
+      "cost": 0,
+      "type": "BLANK",
+      "amount": 0,
+      "action": "blankAction"
     }
   ]
 }

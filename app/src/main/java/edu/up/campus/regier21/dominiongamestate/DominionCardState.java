@@ -11,7 +11,7 @@ import static android.content.ContentValues.TAG;
  * A data class intended to represent the state of a card object.
  * Only one instance should be created per unique card.
  *
- * @author Julian Donovan
+ * @author Julian Donovan, Hayden Liao, Ashika Mulagada
  */
 public class DominionCardState {
     //Card attributes
@@ -64,6 +64,25 @@ public class DominionCardState {
         this.addedDraw = addedDraw;
         this.addedBuys = addedBuys;
         this.victoryPoints = victoryPoints;
+    }
+
+    //blank constructor
+        //these fields currently have dummy values, so we don't get compiler errors
+    public DominionCardState(){
+        this.title = "Blank";
+        this.photoID = null;
+        this.text = "Blank text";
+        this.cost = 0;
+        this.type = DominionCardType.BLANK;
+
+        //Dynamically assigned by method reflection, allowing for a String method reference to be held in JSON
+        this.action = getMethod("blankAction");
+
+        this.addedTreasure = 0;
+        this.addedActions = 0;
+        this.addedDraw = 0;
+        this.addedBuys = 0;
+        this.victoryPoints = 0;
     }
 
     /**
@@ -189,9 +208,7 @@ public class DominionCardState {
     8. village
     9. council room
     10. money lender(alpha)
-        //may trash a copper for 3
-    //discard a card per empty supply
-     */
+        //may trash a copper for 3*/
 
     //If no special behavior is added to "return basicAction(game) methods
     //replace their JSON method reference with basicAction
@@ -230,11 +247,46 @@ public class DominionCardState {
     }
 
     private boolean councilRoomAction(DominionGameState game) {
-        for(int i = 0; i < game.dominionPlayers.length; i++) {
-            if(i != game.currentTurn) game.dominionPlayers[i].getDeck().draw();
+        for (int i = 0; i < game.dominionPlayers.length; i++) {
+            if (i != game.currentTurn) game.dominionPlayers[i].getDeck().draw();
         }
         return basicAction(game);
     }
+
+    //Harder actions that we will worry about implementing later
+    private boolean harbingerAction() {
+        return true;
+    }
+
+    private boolean remodelAction() { return true; }
+
+    private boolean throneAction() { return true; }
+
+    private boolean artisanAction() { return true; }
+
+    private boolean witchAction() { return true; }
+
+    private boolean libraryAction() {
+        return true;
+    }
+
+    private boolean militiaAction() {
+        return true;
+    }
+
+    //Supply Card Actions
+    //Not in use as of current
+    /*private boolean copperAction() {
+        return true;
+    }
+
+    private boolean estateAction() {
+        return true;
+    }
+
+    private boolean duchyAction() {
+        return true;
+    }*/
 
     private boolean moneylenderAction(DominionGameState game) {
         if(game.dominionPlayers[game.currentTurn].getDeck().discard("Copper")) {
@@ -260,7 +312,7 @@ public class DominionCardState {
      * </ul>
      * @return Action success
      */
-    private boolean basicAction(DominionGameState game){
+    private boolean basicAction(DominionGameState game) {
         DominionPlayerState currentPlayer = game.dominionPlayers[game.currentTurn];
         currentPlayer.getDeck().drawMultiple(this.addedDraw);
         game.actions += this.addedActions;

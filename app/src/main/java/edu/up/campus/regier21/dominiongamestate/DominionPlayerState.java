@@ -1,8 +1,10 @@
 package edu.up.campus.regier21.dominiongamestate;
 
+import java.util.ArrayList;
+
 /**
  * A data class intended to represent the state of a player object
- * @author Ryan Regier, Julian Donovan
+ * @author Ryan Regier, Julian Donovan, Ashika Mulagada, Hayden Liao
  */
 public class DominionPlayerState {
 
@@ -23,6 +25,12 @@ public class DominionPlayerState {
         this.silverBoon = false;
     }
 
+    protected DominionPlayerState(DominionPlayerState playerState, boolean isThisPlayer){
+        this.name = playerState.name;
+        if(isThisPlayer) this.victoryPoints = playerState.victoryPoints;
+        this.deck = new DominionDeckState(playerState.deck, isThisPlayer);
+    }
+
     /**
      * Populates deck's discard member variable with 7 copper and 3 estates for start of game.
      * Removes copper from the pile used.
@@ -35,12 +43,14 @@ public class DominionPlayerState {
         deck.addManyToDiscard(copper.getCard(), 7);
         copper.removeAmount(7); //Removes 7 copper from the base card's draw pile
         deck.addManyToDiscard(estate, 3);
-        deck.reshuffle(); //
+        //deck.reshuffle();
     }
 
     public DominionDeckState getDeck() {
         return deck;
     }
+
+    public String getName() { return name; }
 
     /**
      * Overrides the default inherited toString() behavior, properly displaying object data

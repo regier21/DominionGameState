@@ -6,7 +6,7 @@ import java.util.Locale;
  * A data class intended to represent a pile of cards in the shop.
  * Tracks card type and amount.
  *
- * @author Ryan Regier, Julian Donovan
+ * @author Ryan Regier, Julian Donovan, Hayden Liao
  */
 public class DominionShopPileState {
     private final DominionCardState card;
@@ -15,6 +15,11 @@ public class DominionShopPileState {
     public DominionShopPileState(DominionCardState card, int amount){
         this.card = card;
         this.amount = amount;
+    }
+
+    public DominionShopPileState(DominionShopPileState shopPileState){
+        this.card = shopPileState.card;
+        this.amount = shopPileState.amount;
     }
 
     public DominionCardState getCard() {
@@ -39,6 +44,7 @@ public class DominionShopPileState {
 
     @Override
     public String toString(){
-        return String.format(Locale.US, "Card pile. Card: %s, Amount: %d", card.getTitle(), amount);
+        String ret = String.format(Locale.US, "\nCard pile. Card: %s, Amount: %d", card.getTitle(), amount);
+        return ret;
     }
 }

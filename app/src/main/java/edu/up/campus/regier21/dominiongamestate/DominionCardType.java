@@ -2,14 +2,15 @@ package edu.up.campus.regier21.dominiongamestate;
 
 /**
  * Enum class purposed to handle DominionCardState types
- * @author Ryan Regier
+ * @author Ryan Regier, Hayden Liao
  */
 public enum DominionCardType {
     TREASURE,
     VICTORY,
     ACTION,
     ATTACK,
-    REACTION;
+    REACTION,
+    BLANK;
 
     /**
      * Parses a given string, converting its character value to a DominionCardType enum

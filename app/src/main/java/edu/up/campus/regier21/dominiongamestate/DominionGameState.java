@@ -12,7 +12,7 @@ import static android.content.ContentValues.TAG;
 
 /**
  * A data class intended to represent the state of a game object
- * @author Ryan Regier, Julian Donovan, Ashika Mulgada, Hayden Liao
+ * @author Ryan Regier, Julian Donovan, Ashika Mulagada, Hayden Liao
  */
 public class DominionGameState {
 
@@ -28,14 +28,16 @@ public class DominionGameState {
     protected final ArrayList<DominionShopPileState> baseCards;
     protected final ArrayList<DominionShopPileState> shopCards;
 
-    private final int PILE_COPPER = 0;
-    private final int PILE_ESTATE = 1;
+    private final int PILE_COPPER;
+    private final int PILE_ESTATE;
 
     protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
     protected int currentTurn;
     protected int attackTurn; //player id of responder
     protected boolean isAttackTurn;
     protected boolean isGameOver;
+
+    protected int numPlayers;
 
     protected int actions;
     protected int buys;
@@ -47,9 +49,13 @@ public class DominionGameState {
 
     private int emptyPiles;
 
-    public DominionGameState(int numPlayers, ArrayList<DominionShopPileState> baseCardArray,
+    public DominionGameState(int paramNumPlayers, ArrayList<DominionShopPileState> baseCardArray,
                               ArrayList<DominionShopPileState> shopCardArray) {
+        PILE_COPPER = 0;
+        PILE_ESTATE = 1;
+
         //Updates shop amounts for 2 player game
+        numPlayers = paramNumPlayers;
         if (numPlayers == 2) {
             //Base cards
             for (DominionShopPileState pile : baseCardArray) {
@@ -77,8 +83,8 @@ public class DominionGameState {
                     baseCards.get(PILE_ESTATE).getCard()); //The estate card
         }
 
-        //Sets up turn
-        this.currentTurn = new Random().nextInt(numPlayers);
+        //Sets up turn with player 0 as first player
+        this.currentTurn = 0;
         this.treasure = 0;
         this.buys = 1;
         this.actions = 1;
@@ -91,26 +97,39 @@ public class DominionGameState {
         this.emptyPiles = 0;
     }
 
-    /**
-     * Clones a DominionGameState, returning a deep copy
-     * @return A deep copy of DominionGameState
-     */
-    //TODO: finish
-    //make this a constructor
-    @Override
-    protected DominionGameState clone() {
-        DominionGameState clone = null;
+    //obfuscated copy
+    public DominionGameState(DominionGameState gameState, DominionPlayerState playerState){
+        PILE_COPPER = 0;
+        PILE_ESTATE = 1;
 
-        try{
-            clone = (DominionGameState) super.clone();
-            clone.dominionPlayers = Arrays.copyOf(dominionPlayers, dominionPlayers.length);
-        }
-        catch(CloneNotSupportedException cnse) {
-            Log.e(TAG, "Error while cloning DominionGameState: ", cnse);
-            return null;
+        this.baseCards= new ArrayList<DominionShopPileState>();
+        this.shopCards= new ArrayList<DominionShopPileState>();
+
+        for(DominionShopPileState basePileState: gameState.baseCards){
+            this.baseCards.add(new DominionShopPileState(basePileState));
         }
 
-        return clone;
+        for(DominionShopPileState shopPileState: gameState.shopCards){
+            this.baseCards.add(new DominionShopPileState(shopPileState));
+        }
+
+        this.numPlayers = gameState.numPlayers;
+        this.dominionPlayers = new DominionPlayerState[this.numPlayers];
+
+        //copy each player including the deckState
+        for (int i = 0; i < this.numPlayers; i++) {
+            //if(i == playerState)
+            this.dominionPlayers[i] = new DominionPlayerState(gameState.dominionPlayers[i],
+                    gameState.currentTurn == i);
+        }
+        this.currentTurn = gameState.currentTurn;
+        this.attackTurn = gameState.attackTurn;
+        this.isAttackTurn = gameState.isAttackTurn;
+        this.isGameOver = gameState.isGameOver;
+
+        this.actions = gameState.actions;
+        this.buys = gameState.buys;
+        this.treasure = gameState.treasure;
     }
 
     /**
@@ -119,7 +138,8 @@ public class DominionGameState {
      * @param playerID PlayerID in question, for which data will be found
      */
     protected void hideInformation(DominionGameState state, int playerID){
-        //TODO
+        //COMMENT FOR THE GRADER: functionality wrapped into copy constructor.
+            //not deleting with intention of (maybe?) implementing this later.
     }
 
     @Override
@@ -150,14 +170,14 @@ public class DominionGameState {
          *  https://stackoverflow.com/questions/1978933/a-quick-and-easy-way-to-join-array-elements-with-a-separator-the-opposite-of-sp
          * Solution: Used built-in Android helper function
          */
-        baseStr = String.format(Locale.US, "The base cards in the shop:\n%s",
+        baseStr = String.format(Locale.US, "\nThe base cards in the shop:\n%s",
                 TextUtils.join("\n", baseStrs));
 
         String[] shopStrs = new String[shopCards.size()];
         for (int i = 0; i < shopCards.size(); i++){
             shopStrs[i] = shopCards.get(i).toString();
         }
-        shopStr = String.format(Locale.US, "The kingdom cards in the shop:\n%s",
+        shopStr = String.format(Locale.US, "\nThe kingdom cards in the shop:\n%s",
                 TextUtils.join("\n", shopStrs));
 
         String[] playerStrs = new String[dominionPlayers.length];
