@@ -212,6 +212,7 @@ public class DominionCardState {
 
     //If no special behavior is added to "return basicAction(game) methods
     //replace their JSON method reference with basicAction
+    //TODO: Change XML, remove these functions
     private boolean moatAction(DominionGameState game) {
         return basicAction(game);
     }
@@ -253,6 +254,7 @@ public class DominionCardState {
         return basicAction(game);
     }
 
+    //TODO: remove or add game reference parameter
     //Harder actions that we will worry about implementing later
     private boolean harbingerAction() {
         return true;
@@ -296,8 +298,13 @@ public class DominionCardState {
         return false;
     }
 
+    //TODO Disable silver boon at turn end
     private boolean silverAction(DominionGameState game) {
-        if(game.dominionPlayers[game.currentTurn].silverBoon) game.treasure += 1; //Handles merchant silver boon
+        if(game.dominionPlayers[game.currentTurn].silverBoon) {
+            game.treasure += 1; //Handles merchant silver boon
+            game.dominionPlayers[game.currentTurn].silverBoon = false;
+        }
+
         return basicAction(game);
     }
 

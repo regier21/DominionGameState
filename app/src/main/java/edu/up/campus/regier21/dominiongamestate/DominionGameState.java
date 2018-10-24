@@ -43,6 +43,11 @@ public class DominionGameState {
     protected int buys;
     protected int treasure;
 
+    //TODO: Detect legal moves
+    //Buy: can you afford it?
+    //Action: is card in hand? do you have action (if action card)? is it your turn?
+    //TODO: Detect game over
+
     //RULE: With 2 players, 8 of each victory card should exist
     //      With 3-4 players, default to 12 copies of each victory card
     private final int VICTORY_CARDS_2_PLAYER = 8;
