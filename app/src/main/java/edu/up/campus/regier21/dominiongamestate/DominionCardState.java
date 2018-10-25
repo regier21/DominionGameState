@@ -126,7 +126,7 @@ public class DominionCardState {
         }
         catch (NoSuchMethodException e) {
             Log.e(TAG, "Error encountered reflecting action method: " + e + " with card " + this.title);
-            throw new IllegalArgumentException("Card function does not exist", e);
+            throw new IllegalArgumentException("Card function " + action + " does not exist", e);
         }
     }
 
@@ -222,20 +222,22 @@ public class DominionCardState {
     }
 
     private boolean merchantAction(DominionGameState game) {
-        game.dominionPlayers[game.currentTurn].silverBoon = true; //The first Silver played is worth one more
+        game.silverBoon = true; //The first Silver played is worth one more
         return basicAction(game);
     }
 
 
     private boolean councilRoomAction(DominionGameState game) {
+        //Card text: "Each other player draws a card"
         for (int i = 0; i < game.dominionPlayers.length; i++) {
             if (i != game.currentTurn) game.dominionPlayers[i].getDeck().draw();
         }
         return basicAction(game);
     }
 
+    //TODO: Should player have a choice here?
     private boolean moneylenderAction(DominionGameState game) {
-        if(game.dominionPlayers[game.currentTurn].getDeck().discard("Copper")) {
+        if(game.dominionPlayers[game.currentTurn].getDeck().discard("Copper") /*TODO: Use card ID instead*/) {
             game.treasure += 3;
             return true;
         }
@@ -243,9 +245,9 @@ public class DominionCardState {
     }
 
     private boolean silverAction(DominionGameState game) {
-        if(game.dominionPlayers[game.currentTurn].silverBoon) {
+        if(game.silverBoon) {
             game.treasure += 1; //Handles merchant silver boon
-            game.dominionPlayers[game.currentTurn].silverBoon = false;
+            game.silverBoon = false;
         }
 
         return basicAction(game);

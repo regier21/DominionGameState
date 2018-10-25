@@ -46,11 +46,11 @@ public class DominionGameState {
     protected int actions;
     protected int buys;
     protected int treasure;
+    protected boolean silverBoon; //Merchant: first silver is worth 1 more
 
     private int emptyPiles;
     private boolean providenceEmpty = false;
 
-    //TODO: All other missing GameState functions (see below)
     //TODO: Ensure all changes as described in the previous GameState submission's comments have been made
 
     //RULE: With 2 players, 8 of each victory card should exist
@@ -98,6 +98,7 @@ public class DominionGameState {
         this.treasure = 0;
         this.buys = 1;
         this.actions = 1;
+        this.silverBoon = false;
 
         this.isGameOver = false;
 
@@ -134,12 +135,15 @@ public class DominionGameState {
         this.isAttackTurn = gameState.isAttackTurn;
         this.isGameOver = gameState.isGameOver;
         this.emptyPiles = gameState.emptyPiles;
+        this.providenceEmpty = gameState.providenceEmpty;
+        this.silverBoon = gameState.silverBoon;
 
         this.actions = gameState.actions;
         this.buys = gameState.buys;
         this.treasure = gameState.treasure;
     }
 
+    //TODO: Delete (maybe)
     /**
      * Yields information to the player as necessary, obscuring game state data not relevant to that particular player
      * @param state Relevant DominionGameState from which data will be gathered
@@ -210,8 +214,8 @@ public class DominionGameState {
 
     //Start of actions that can be performed by a player
 
+    /*
     //TODO: Delete this..?
-    //TODO: Change card from card to hand index
     public boolean revealCard(int playerID, int handIndex){
         if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
             //Reveal card
@@ -230,19 +234,20 @@ public class DominionGameState {
         }
 
         return false;
-    }
+    }*/
 
-    public boolean buyCard(int playerID, int cardID, boolean baseCard){
-        if (isLegalBuy(playerID, cardID, baseCard)) {
+    public boolean buyCard(int playerID, int cardIndex, boolean baseCard){
+        if (isLegalBuy(playerID, cardIndex, baseCard)) {
             DominionShopPileState cardPile;
-            if (baseCard) cardPile = baseCards.get(cardID);
-            else cardPile = shopCards.get(cardID);
+            if (baseCard) cardPile = baseCards.get(cardIndex);
+            else cardPile = shopCards.get(cardIndex);
             dominionPlayers[playerID].getDeck().discardNew(cardPile.getCard());
             cardPile.removeCard();
             buys--;
+            treasure -= cardPile.getCard().getCost();
             if (cardPile.getAmount() == 0){
                 emptyPiles++;
-                if (baseCard && cardID == PILE_PROVIDENCE){
+                if (baseCard && cardIndex == PILE_PROVIDENCE){
                     providenceEmpty = true;
                 }
             }
@@ -253,6 +258,7 @@ public class DominionGameState {
         return false;
     }
 
+    /*
     //TODO: Delete this
     public boolean chooseCard(int playerID){
         if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
@@ -260,7 +266,7 @@ public class DominionGameState {
             return true;
         }
         return false;
-    }
+    }*/
 
     public boolean endTurn(int playerID){
         if(this.currentTurn == playerID) {
@@ -272,6 +278,7 @@ public class DominionGameState {
                 actions = 1;
                 currentTurn = (currentTurn + 1) % 4;
                 attackTurn = currentTurn;
+                silverBoon = false;
             }
 
             return true;
@@ -292,6 +299,7 @@ public class DominionGameState {
         return false;
     }
 
+    //TODO: This looks wrong, and simply setting game over makes it impossible to see if game ended normally, or there was a forefit
     /**
      * Allows the user to quit the game so long as the game has not already been quit.
      * Returns a truth value describing the success of this action
@@ -312,7 +320,9 @@ public class DominionGameState {
         if(isLegalPlay(playerID, cardIndex)) {
             DominionDeckState deck = this.dominionPlayers[playerID].getDeck();
             DominionCardState card = deck.getHand().get(cardIndex);
-            card.cardAction(this);
+            if(!card.cardAction(this)){
+                return false;
+            };
             deck.discard(cardIndex);
             return true;
         }
@@ -348,7 +358,8 @@ public class DominionGameState {
                 if (!baseCard && cardIndex >= 0 && cardIndex < shopCards.size()) {
                     DominionShopPileState shopPile = shopCards.get(cardIndex);
                     if (shopPile.getAmount() >= 1){ //Pile has a card
-                        return true;
+                        if (treasure >= shopPile.getCard().getCost()) //Can afford
+                            return true;
                     }
                 }
                 else if (baseCard && cardIndex >= 0 && cardIndex < baseCards.size()){
@@ -362,17 +373,19 @@ public class DominionGameState {
         return false;
     }
 
+
+    //TODO: Delete this
     /**
      * Determines whether a card exists in the shop in a positive, non-zero quantity.
      * Returns a truth value
      *
      * @return A boolean describing whether the selected card exists in shopCards
      */
-    private boolean isShopCard(DominionCardState card) {
+    /*private boolean isShopCard(DominionCardState card) {
         for(DominionShopPileState shopPile : shopCards) {
             if(card == shopPile.getCard() && shopPile.getAmount() > 0) return true;
         }
         return false;
-    }
+    }*/
 
 }

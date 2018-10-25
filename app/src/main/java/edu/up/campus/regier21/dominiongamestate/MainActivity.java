@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
      * Solution: Using class name as a tag
      **/
     private static final String TAG = MainActivity.class.getSimpleName();
+    //TODO: Comment every method
+    //TODO: Only read cards we will use in alpha
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,24 +63,29 @@ public class MainActivity extends AppCompatActivity {
        gameStateTest = gameStateTest.concat("The Moat triggers its draw effect as " + firstInstance.drawCard(0)
                + " granting Player 1 two more cards.\n");
 
-       gameStateTest = gameStateTest.concat("This draw effect animates the reveal of two cards from the top of " +
-               "Player 1's deck as demonstrated by revealCard() yielding " + firstInstance.revealCard(0) + "\n");
+       //TODO: Delete this
+       /*gameStateTest = gameStateTest.concat("This draw effect animates the reveal of two cards from the top of " +
+               "Player 1's deck as demonstrated by revealCard() yielding " + firstInstance.revealCard(0) + "\n");*/
 
        gameStateTest = gameStateTest.concat("Opting to spend all 6 of their treasure, Player 1 buys 1 Gold card. " +
-                       "buyCard() evaluates as " + firstInstance.buyCard(0) + ".\n");
+                       "buyCard() evaluates as " + firstInstance.buyCard(0, 4, true) + ".\n");
 
        gameStateTest = gameStateTest.concat("Having done all they can, Player 1 decides to end their turn which " +
                "yields " + firstInstance.endTurn(0) + "\n");
 
-       gameStateTest = gameStateTest.concat("Player 2 has started their turn and decided to attack Player 1 with a " +
+       //TODO: Delete this
+       /*gameStateTest = gameStateTest.concat("Player 2 has started their turn and decided to attack Player 1 with a " +
                "militia. \nPlayer 1 must choose two cards to discard. Selecting two Witches resolves as "
-               + firstInstance.chooseCard(0) + "\n");
+               + firstInstance.chooseCard(0) + "\n");*/
 
+       //TODO: Delete this
+       /*
        gameStateTest = gameStateTest.concat("The two Witches selected are now being discarded. discardCard() " +
                "evaluates as " + firstInstance.discardCard(0) + "\n");
+       */
 
        gameStateTest = gameStateTest.concat("Growing impatient as Player 2's turn drags on, Player 1 decides to " +
-               "quitGame. This runs " + firstInstance.quitGame(0) + "\n");
+               "quitGame. This runs " + firstInstance.quitGame() + "\n");
 
        ArrayList<DominionShopPileState> shopCards2 = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
 
