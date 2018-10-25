@@ -96,7 +96,7 @@ public class DominionCardState {
         this.type = DominionCardType.BLANK;
 
         //Dynamically assigned by method reflection, allowing for a String method reference to be held in JSON
-        this.action = getMethod("baseAction");
+        this.action = getMethod("basicAction");
 
         this.addedTreasure = 0;
         this.addedActions = 0;
@@ -122,7 +122,7 @@ public class DominionCardState {
      */
     private Method getMethod(String action){
         try {
-            return DominionCardState.class.getDeclaredMethod(action);
+            return DominionCardState.class.getDeclaredMethod(action, DominionGameState.class);
         }
         catch (NoSuchMethodException e) {
             Log.e(TAG, "Error encountered reflecting action method: " + e + " with card " + this.title);
@@ -275,7 +275,7 @@ public class DominionCardState {
     }*/
 
     /**
-     * Base action.
+     * Basic action.
      * Used by any card whose action contain the following:
      * <ul>
      *     <li>Draw</li>
