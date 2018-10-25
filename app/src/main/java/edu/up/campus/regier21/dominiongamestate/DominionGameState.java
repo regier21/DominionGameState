@@ -59,8 +59,6 @@ public class DominionGameState {
     //  two players play
     private final int VICTORY_CARDS_2_PLAYER = 8;
 
-
-
     public DominionGameState(int paramNumPlayers, ArrayList<DominionShopPileState> baseCardArray,
                               ArrayList<DominionShopPileState> shopCardArray) {
 

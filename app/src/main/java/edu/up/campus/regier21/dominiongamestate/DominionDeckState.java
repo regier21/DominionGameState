@@ -19,9 +19,12 @@ public class DominionDeckState {
     private final ArrayList<DominionCardState> discard;
     private final ArrayList<DominionCardState> hand;
 
-    public DominionDeckState(int startSize){
-        draw = new ArrayList<>(startSize);
-        discard = new ArrayList<>(startSize);
+    /**
+     * Constructor. Creates empty deck.
+     */
+    public DominionDeckState(){
+        draw = new ArrayList<>(10);
+        discard = new ArrayList<>(10);
         hand = new ArrayList<>(10);
     }
 
@@ -37,28 +40,34 @@ public class DominionDeckState {
         this.hand = new ArrayList<DominionCardState>(deckState.hand.size());
 
         for(int i = 0; i < deckState.draw.size(); i++){
-            this.draw.add(new DominionCardState());
+            this.draw.add(DominionCardState.BLANK_CARD);
         }
 
         for(int i = 0; i < deckState.discard.size() - 1; i++){
-            this.discard.add(new DominionCardState());
+            this.discard.add(DominionCardState.BLANK_CARD);
         }
         //Reveal the top of the discard pile
         this.discard.add(new DominionCardState(deckState.discard.get(deckState.discard.size()-1)));
 
 
         if(isRealDeck){
+            //Show hand
             for(DominionCardState card : deckState.hand){
                 this.hand.add(new DominionCardState(card));
             }
-
-        } else {
+        }
+        else {
+            //Make hand blank
             for(int i = 0; i < deckState.hand.size(); i++){
-                this.hand.add(new DominionCardState());
+                this.hand.add(DominionCardState.BLANK_CARD);
             }
         }
     }
 
+    /**
+     * Get the number of cards in hand
+     * @return The hand size
+     */
     public int getHandSize(){ return  hand.size(); }
 
     /**
@@ -99,6 +108,10 @@ public class DominionDeckState {
         return card;
     }
 
+    /**
+     * Draws multiple cards at once and adds them to hand.
+     * @param drawNum The number of cards to draw. Will draw fewer if deck has fewer cards.
+     */
     public void drawMultiple(int drawNum){
         for(int i = 0; i < drawNum; i++){
             DominionCardState card = draw();
@@ -132,6 +145,12 @@ public class DominionDeckState {
         }
     }
 
+    /**
+     * Tries to put a card in the discard pile.
+     * Looks for first card in hand that matches the name.
+     * @param cardName The name of the card to discard
+     * @return true if card matching name was in the hand and has been discarded, false if it is not
+     */
     public boolean discard(String cardName){
         for(DominionCardState card : hand){
            if(card.getTitle().equals(cardName)) {
@@ -203,6 +222,10 @@ public class DominionDeckState {
         Collections.shuffle(draw);
     }
 
+    /**
+     * Get the number of cards in hand, draw, and discard.
+     * @return The number of cards in the deck
+     */
     public int getTotalCards(){
         return getDiscardSize() + getHandSize() + getDrawSize();
     }
@@ -232,6 +255,10 @@ public class DominionDeckState {
         }
     }
 
+    /**
+     * Displays deck as string
+     * @return The string in question
+     */
     @Override
     public String toString(){
 

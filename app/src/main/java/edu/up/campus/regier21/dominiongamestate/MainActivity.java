@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
      **/
     private static final String TAG = MainActivity.class.getSimpleName();
     //TODO: Comment every method
-    //TODO: Only read cards we will use in alpha
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -17,7 +17,7 @@ public class DominionPlayerState {
         this.name = name;
 
         //Initializes player deck
-        this.deck = new DominionDeckState(10);
+        this.deck = new DominionDeckState();
         populateStartingDeck(copper, estate);
 
         this.victoryPoints = 3;
