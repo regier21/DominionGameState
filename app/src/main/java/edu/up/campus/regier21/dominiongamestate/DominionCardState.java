@@ -76,7 +76,7 @@ public class DominionCardState {
         this.type = DominionCardType.BLANK;
 
         //Dynamically assigned by method reflection, allowing for a String method reference to be held in JSON
-        this.action = getMethod("blankAction");
+        this.action = getMethod("baseAction");
 
         this.addedTreasure = 0;
         this.addedActions = 0;
@@ -196,32 +196,8 @@ public class DominionCardState {
         return victoryPoints;
     }
 
-    //Card Action Methods
-    /*
-    1. moat
-    2. market
-    3. laboratory
-    4. merchant
-    5. gardens
-    6. festival
-    7. smithy
-    8. village
-    9. council room
-    10. money lender(alpha)
-        //may trash a copper for 3*/
-
-    //If no special behavior is added to "return basicAction(game) methods
-    //replace their JSON method reference with basicAction
-    //TODO: Change XML, remove these functions
     private boolean moatAction(DominionGameState game) {
-        return basicAction(game);
-    }
-
-    private boolean marketAction(DominionGameState game) {
-        return basicAction(game);
-    }
-
-    private boolean laboratoryAction(DominionGameState game) {
+        //Will have other behavior upon adding ATTACK cards
         return basicAction(game);
     }
 
@@ -230,22 +206,6 @@ public class DominionCardState {
         return basicAction(game);
     }
 
-    private boolean gardensAction(DominionGameState game) {
-        //No action required, however a special tracking implementation must be added to the vp counting method
-        return true;
-    }
-
-    private boolean festivalAction(DominionGameState game) {
-        return basicAction(game);
-    }
-
-    private boolean smithyAction(DominionGameState game) {
-        return basicAction(game);
-    }
-
-    private boolean villageAction(DominionGameState game) {
-        return basicAction(game);
-    }
 
     private boolean councilRoomAction(DominionGameState game) {
         for (int i = 0; i < game.dominionPlayers.length; i++) {
@@ -254,9 +214,25 @@ public class DominionCardState {
         return basicAction(game);
     }
 
-    //TODO: remove or add game reference parameter
+    private boolean moneylenderAction(DominionGameState game) {
+        if(game.dominionPlayers[game.currentTurn].getDeck().discard("Copper")) {
+            game.treasure += 3;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean silverAction(DominionGameState game) {
+        if(game.dominionPlayers[game.currentTurn].silverBoon) {
+            game.treasure += 1; //Handles merchant silver boon
+            game.dominionPlayers[game.currentTurn].silverBoon = false;
+        }
+
+        return basicAction(game);
+    }
+
     //Harder actions that we will worry about implementing later
-    private boolean harbingerAction() {
+    /*private boolean harbingerAction() {
         return true;
     }
 
@@ -274,43 +250,11 @@ public class DominionCardState {
 
     private boolean militiaAction() {
         return true;
-    }
-
-    //Supply Card Actions
-    //Not in use as of current
-    /*private boolean copperAction() {
-        return true;
-    }
-
-    private boolean estateAction() {
-        return true;
-    }
-
-    private boolean duchyAction() {
-        return true;
     }*/
 
-    private boolean moneylenderAction(DominionGameState game) {
-        if(game.dominionPlayers[game.currentTurn].getDeck().discard("Copper")) {
-            game.treasure += 3;
-            return true;
-        }
-        return false;
-    }
-
-    //TODO Disable silver boon at turn end
-    private boolean silverAction(DominionGameState game) {
-        if(game.dominionPlayers[game.currentTurn].silverBoon) {
-            game.treasure += 1; //Handles merchant silver boon
-            game.dominionPlayers[game.currentTurn].silverBoon = false;
-        }
-
-        return basicAction(game);
-    }
-
     /**
-     * Special action.
-     * Used by any card whose action consists of only the following:
+     * Base action.
+     * Used by any card whose action contain the following:
      * <ul>
      *     <li>Draw</li>
      *     <li>Actions</li>

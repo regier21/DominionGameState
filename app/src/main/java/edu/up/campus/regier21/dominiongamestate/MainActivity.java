@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.util.Log;
 import android.widget.TextView;
 
-import java.sql.Array;
 import java.util.ArrayList;
 
 /**
@@ -56,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
        gameStateTest = gameStateTest.concat(baseCards1.toString()) + "\n";
        gameStateTest = gameStateTest.concat("FIRST INSTANCE:\n" + firstInstance.toString() + "\n");
 
-       gameStateTest = gameStateTest.concat("Player 1's turn has just began. They decide to play a Moat. playCard() " +
-               "runs " + firstInstance.playCard(0) + ".\n");
+       //gameStateTest = gameStateTest.concat("Player 1's turn has just began. They decide to play a Moat. playCard() " +
+       //        "runs " + firstInstance.playCard(0, ) + ".\n");
 
        gameStateTest = gameStateTest.concat("The Moat triggers its draw effect as " + firstInstance.drawCard(0)
                + " granting Player 1 two more cards.\n");
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                "evaluates as " + firstInstance.discardCard(0) + "\n");
 
        gameStateTest = gameStateTest.concat("Growing impatient as Player 2's turn drags on, Player 1 decides to " +
-               "quit. This runs " + firstInstance.quit(0) + "\n");
+               "quitGame. This runs " + firstInstance.quitGame(0) + "\n");
 
        ArrayList<DominionShopPileState> shopCards2 = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
 

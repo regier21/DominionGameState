@@ -43,10 +43,8 @@ public class DominionGameState {
     protected int buys;
     protected int treasure;
 
-    //TODO: Detect legal moves
-    //Buy: can you afford it?
-    //Action: is card in hand? do you have action (if action card)? is it your turn?
-    //TODO: Detect game over
+    //TODO: All other missing GameState functions (see below)
+    //TODO: Ensure all changes as described in the previous GameState submission's comments have been made
 
     //RULE: With 2 players, 8 of each victory card should exist
     //      With 3-4 players, default to 12 copies of each victory card
@@ -207,6 +205,7 @@ public class DominionGameState {
 
     //Start of actions that can be performed by a player
 
+    //TODO: Delete this..?
     public boolean revealCard(int playerID){
         if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
             //Reveal card
@@ -247,23 +246,79 @@ public class DominionGameState {
         return false;
     }
 
+    /**
+     * Determines whether a card may be legally drawn considering whether it is that player's turn.
+     * Returns a truth value describing the success of the draw
+     *
+     * @return A boolean describing whether the selected card was successfully drawn
+     */
     public boolean drawCard(int playerID){
         if(this.currentTurn == playerID) {
-            //Draw card
+            return (this.dominionPlayers[playerID].getDeck().draw() != null);
+        }
+        return false;
+    }
+
+    /**
+     * Allows the user to quit the game so long as the game has not already been quit.
+     * Returns a truth value describing the success of this action
+     *
+     * @return A boolean describing whether the game was successfully quit
+     */
+    public boolean quitGame(int playerID){
+        return (!isGameOver && (this.isGameOver = true));
+    }
+
+    /**
+     * Plays a card, if legal, calling its action method and moving it to the discard pile.
+     * Returns a boolean as to the success of this operation
+     *
+     * @return A boolean describing whether the selected card may legally be played
+     */
+    public boolean playCard(int playerID, DominionCardState card){
+        if(isLegalPlay(playerID, card, card.getType().equals("ACTION"))) {
+            DominionDeckState deck = this.dominionPlayers[playerID].getDeck();
+            card.cardAction(this);
+            deck.discard(card);
             return true;
         }
         return false;
     }
 
-    public boolean quit(int playerID){
-        //Quit game
-        return true;
+    /**
+     * Determines whether a card may be legally played, considering the current player, the card's existence,
+     * and if of type ACTION, the player's actions available. Returns a truth value.
+     *
+     * @return A boolean describing whether the selected card may legally be played
+     */
+    public boolean isLegalPlay(int playerID, DominionCardState card, boolean isAction) {
+        if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHand().contains(card)) {
+            if(isAction && this.actions <= 0) return false; //An available actions is required to play an action card
+            return true;
+        }
+        return false;
     }
 
-    public boolean playCard(int playerID){
-        if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
-            //Play card
-            return true;
+    /**
+     * Determines whether a card may be legally bought, considering the current player, the card's existence,
+     * and the player's buys available. Returns a truth value.
+     *
+     * @return A boolean describing whether the selected card may legally be bought
+     */
+    public boolean isLegalBuy(int playerID, DominionCardState card) {
+        if(this.currentTurn == playerID && isShopCard(card) && this.buys > 0) return true;
+        return false;
+    }
+
+    /**
+     * Determines whether a card exists in the shop in a positive, non-zero quantity.
+     * Returns a truth value
+     *
+     * @return A boolean describing whether the selected card exists in shopCards
+     */
+    private boolean isShopCard(DominionCardState card) {
+        for(DominionShopPileState shopPile : shopCards) {
+            if(card == shopPile.getCard() && shopPile.getAmount() > 0) return true;
         }
         return false;
     }
