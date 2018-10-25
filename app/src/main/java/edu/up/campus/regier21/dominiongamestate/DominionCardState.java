@@ -11,7 +11,7 @@ import static android.content.ContentValues.TAG;
  * A data class intended to represent the state of a card object.
  * Only one instance should be created per unique card.
  *
- * @author Julian Donovan, Hayden Liao, Ashika Mulagada
+ * @author Julian Donovan, Hayden Liao, Ashika Mulagada, Ryan Regier
  */
 public class DominionCardState {
     //Card attributes
@@ -66,8 +66,28 @@ public class DominionCardState {
         this.victoryPoints = victoryPoints;
     }
 
-    //blank constructor
-        //these fields currently have dummy values, so we don't get compiler errors
+    /**
+     * Copy constructor
+     * @param other The instance to copy
+     */
+     public DominionCardState(DominionCardState other){
+        this.title = other.title;
+        this.photoID = other.photoID;
+        this.text = other.text;
+        this.cost = other.cost;
+        this.type = other.type;
+        this.action = other.action;
+        this.addedTreasure = other.addedTreasure;
+        this.addedActions = other.addedActions;
+        this.addedBuys = other.addedBuys;
+        this.addedDraw = other.addedDraw;
+        this.victoryPoints = other.victoryPoints;
+     }
+
+    /**Blank constructor
+     * Creates empty card
+     * Used to obfuscate cards players cannot "see"
+     */
     public DominionCardState(){
         this.title = "Blank";
         this.photoID = null;

@@ -25,34 +25,36 @@ public class DominionDeckState {
         hand = new ArrayList<>(10);
     }
 
+    /**
+     * Copy constructor that obfuscates hidden cards
+     * @param deckState The deck to copy
+     * @param isRealDeck Whether to obfuscate hand
+     */
     public DominionDeckState(DominionDeckState deckState, boolean isRealDeck){
 
-        if(isRealDeck){
-            this.draw = new ArrayList<>(deckState.draw);
-            this.discard = new ArrayList<>(deckState.discard);
-            this.hand = new ArrayList<>(deckState.hand);
+        this.draw = new ArrayList<DominionCardState>(deckState.draw.size());
+        this.discard = new ArrayList<DominionCardState>(deckState.discard.size());
+        this.hand = new ArrayList<DominionCardState>(deckState.hand.size());
 
-            /*
-            this.draw.addAll(deckState.draw);
-            this.discard.addAll(deckState.discard);
-            this.hand.addAll(deckState.hand);
-            */
+        for(int i = 0; i < deckState.draw.size(); i++){
+            this.draw.add(new DominionCardState());
+        }
+
+        for(int i = 0; i < deckState.discard.size() - 1; i++){
+            this.discard.add(new DominionCardState());
+        }
+        //Reveal the top of the discard pile
+        this.discard.add(new DominionCardState(deckState.discard.get(deckState.discard.size()-1)));
+
+
+        if(isRealDeck){
+            for(DominionCardState card : deckState.hand){
+                this.hand.add(new DominionCardState(card));
+            }
 
         } else {
-            this.draw = new ArrayList<DominionCardState>();
-            this.discard = new ArrayList<DominionCardState>();
-            this.hand = new ArrayList<DominionCardState>();
-
-            for(DominionCardState blankCard: deckState.draw){
-                this.draw.add(new DominionCardState());
-            }
-            for(DominionCardState blankCard: deckState.discard){
-                this.discard.add(blankCard);
-                this.draw.add(new DominionCardState());
-            }
-            for(DominionCardState blankCard: deckState.hand){
-                this.hand.add(blankCard);
-                this.draw.add(new DominionCardState());
+            for(int i = 0; i < deckState.hand.size(); i++){
+                this.hand.add(new DominionCardState());
             }
         }
     }
@@ -71,9 +73,11 @@ public class DominionDeckState {
                 //Empty deck, cannot reveal card
                 return null;
             }
-            reshuffle();
-        }
+            else {
+                reshuffle();
 
+            }
+        }
         int index = draw.size() - 1;
         DominionCardState card = draw.get(index);
         return card;
@@ -95,10 +99,11 @@ public class DominionDeckState {
         return card;
     }
 
-    public DominionCardState[] drawMultiple(int drawNum){
-        DominionCardState[] drawnCards = new DominionCardState[drawNum];
-        for(int i = 0; i < drawNum; i++) drawnCards[i] = draw();
-        return drawnCards;
+    public void drawMultiple(int drawNum){
+        for(int i = 0; i < drawNum; i++){
+            DominionCardState card = draw();
+            if (card == null) return; //Occurs if draw and discard empty. No reason to continue.
+        }
     }
 
     /**
@@ -112,11 +117,19 @@ public class DominionDeckState {
     /**
      * Puts card in the discard pile.
      * This card will be removed from the hand, if it exists.
-     * @param card The card to put in discard
+     * @param handIndex The index of the card in hand to put in discard
+     * @return Whether the discard succeeds. Fails if index is out of bounds.
      */
-    public void discard(DominionCardState card){
-        discard.add(card);
-        hand.remove(card);
+    public boolean discard(int handIndex){
+        if (handIndex < 0 || handIndex >= hand.size()){
+            return false;
+        }
+        else {
+            DominionCardState card = hand.get(handIndex);
+            discard.add(card);
+            hand.remove(handIndex);
+            return true;
+        }
     }
 
     public boolean discard(String cardName){

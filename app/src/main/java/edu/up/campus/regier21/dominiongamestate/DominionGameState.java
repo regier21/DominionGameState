@@ -28,8 +28,12 @@ public class DominionGameState {
     protected final ArrayList<DominionShopPileState> baseCards;
     protected final ArrayList<DominionShopPileState> shopCards;
 
-    private final int PILE_COPPER;
-    private final int PILE_ESTATE;
+    //Location of cards in base cards
+    //Only need the locations of cards used in starter deck
+    //  as well as providence to detect game over
+    private final int PILE_COPPER = 0;
+    private final int PILE_ESTATE = 1;
+    private final int PILE_PROVIDENCE = 6;
 
     protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
     protected int currentTurn;
@@ -43,19 +47,22 @@ public class DominionGameState {
     protected int buys;
     protected int treasure;
 
+    private int emptyPiles;
+    private boolean providenceEmpty = false;
+
     //TODO: All other missing GameState functions (see below)
     //TODO: Ensure all changes as described in the previous GameState submission's comments have been made
 
     //RULE: With 2 players, 8 of each victory card should exist
     //      With 3-4 players, default to 12 copies of each victory card
+    //The XML file uses the 3-4 player count, so this variable holds the pile size when only
+    //  two players play
     private final int VICTORY_CARDS_2_PLAYER = 8;
 
-    private int emptyPiles;
+
 
     public DominionGameState(int paramNumPlayers, ArrayList<DominionShopPileState> baseCardArray,
                               ArrayList<DominionShopPileState> shopCardArray) {
-        PILE_COPPER = 0;
-        PILE_ESTATE = 1;
 
         //Updates shop amounts for 2 player game
         numPlayers = paramNumPlayers;
@@ -102,9 +109,6 @@ public class DominionGameState {
 
     //obfuscated copy
     public DominionGameState(DominionGameState gameState, DominionPlayerState playerState){
-        PILE_COPPER = 0;
-        PILE_ESTATE = 1;
-
         this.baseCards= new ArrayList<DominionShopPileState>();
         this.shopCards= new ArrayList<DominionShopPileState>();
 
@@ -129,6 +133,7 @@ public class DominionGameState {
         this.attackTurn = gameState.attackTurn;
         this.isAttackTurn = gameState.isAttackTurn;
         this.isGameOver = gameState.isGameOver;
+        this.emptyPiles = gameState.emptyPiles;
 
         this.actions = gameState.actions;
         this.buys = gameState.buys;
@@ -206,7 +211,8 @@ public class DominionGameState {
     //Start of actions that can be performed by a player
 
     //TODO: Delete this..?
-    public boolean revealCard(int playerID){
+    //TODO: Change card from card to hand index
+    public boolean revealCard(int playerID, int handIndex){
         if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
             //Reveal card
             return true;
@@ -214,22 +220,40 @@ public class DominionGameState {
         return false;
     }
 
-    public boolean discardCard(int playerID){
-        if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
-            //Discard card
-            return true;
+    //TODO: Delete this
+    public boolean discardCard(int playerID, int handIndex){
+        if(this.currentTurn == playerID){
+            DominionDeckState deck = this.dominionPlayers[playerID].getDeck();
+            if (deck.getHandSize() > 0){
+                return deck.discard(handIndex);
+            }
         }
+
         return false;
     }
 
-    public boolean buyCard(int playerID){
-        if(this.currentTurn == playerID) {
-            //Buy card
+    public boolean buyCard(int playerID, int cardID, boolean baseCard){
+        if (isLegalBuy(playerID, cardID, baseCard)) {
+            DominionShopPileState cardPile;
+            if (baseCard) cardPile = baseCards.get(cardID);
+            else cardPile = shopCards.get(cardID);
+            dominionPlayers[playerID].getDeck().discardNew(cardPile.getCard());
+            cardPile.removeCard();
+            buys--;
+            if (cardPile.getAmount() == 0){
+                emptyPiles++;
+                if (baseCard && cardID == PILE_PROVIDENCE){
+                    providenceEmpty = true;
+                }
+            }
+
             return true;
         }
+
         return false;
     }
 
+    //TODO: Delete this
     public boolean chooseCard(int playerID){
         if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
             //Choose card
@@ -240,7 +264,16 @@ public class DominionGameState {
 
     public boolean endTurn(int playerID){
         if(this.currentTurn == playerID) {
-            //End turn
+            if (emptyPiles >= 3 || providenceEmpty){
+                isGameOver = true;
+            } else {
+                treasure = 0;
+                buys = 1;
+                actions = 1;
+                currentTurn = (currentTurn + 1) % 4;
+                attackTurn = currentTurn;
+            }
+
             return true;
         }
         return false;
@@ -265,7 +298,7 @@ public class DominionGameState {
      *
      * @return A boolean describing whether the game was successfully quit
      */
-    public boolean quitGame(int playerID){
+    public boolean quitGame(){
         return (!isGameOver && (this.isGameOver = true));
     }
 
@@ -275,11 +308,12 @@ public class DominionGameState {
      *
      * @return A boolean describing whether the selected card may legally be played
      */
-    public boolean playCard(int playerID, DominionCardState card){
-        if(isLegalPlay(playerID, card, card.getType().equals("ACTION"))) {
+    public boolean playCard(int playerID, int cardIndex){
+        if(isLegalPlay(playerID, cardIndex)) {
             DominionDeckState deck = this.dominionPlayers[playerID].getDeck();
+            DominionCardState card = deck.getHand().get(cardIndex);
             card.cardAction(this);
-            deck.discard(card);
+            deck.discard(cardIndex);
             return true;
         }
         return false;
@@ -291,10 +325,13 @@ public class DominionGameState {
      *
      * @return A boolean describing whether the selected card may legally be played
      */
-    public boolean isLegalPlay(int playerID, DominionCardState card, boolean isAction) {
-        if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHand().contains(card)) {
-            if(isAction && this.actions <= 0) return false; //An available actions is required to play an action card
-            return true;
+    public boolean isLegalPlay(int playerID, int cardIndex) {
+        if(this.currentTurn == playerID) {
+            DominionDeckState deck = dominionPlayers[playerID].getDeck();
+            if (cardIndex >= 0 && cardIndex < deck.getHandSize()){
+                DominionCardState card = deck.getHand().get(cardIndex);
+                return card.getType() != DominionCardType.ACTION || actions > 0;
+            }
         }
         return false;
     }
@@ -305,8 +342,23 @@ public class DominionGameState {
      *
      * @return A boolean describing whether the selected card may legally be bought
      */
-    public boolean isLegalBuy(int playerID, DominionCardState card) {
-        if(this.currentTurn == playerID && isShopCard(card) && this.buys > 0) return true;
+    public boolean isLegalBuy(int playerID, int cardIndex, boolean baseCard) {
+        if(this.currentTurn == playerID){
+            if (buys >= 1){
+                if (!baseCard && cardIndex >= 0 && cardIndex < shopCards.size()) {
+                    DominionShopPileState shopPile = shopCards.get(cardIndex);
+                    if (shopPile.getAmount() >= 1){ //Pile has a card
+                        return true;
+                    }
+                }
+                else if (baseCard && cardIndex >= 0 && cardIndex < baseCards.size()){
+                    DominionShopPileState basePile = baseCards.get(cardIndex);
+                    if (basePile.getAmount() >= 1){
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
