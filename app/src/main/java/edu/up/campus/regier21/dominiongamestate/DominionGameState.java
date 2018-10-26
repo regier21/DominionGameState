@@ -169,7 +169,7 @@ public class DominionGameState {
     @Override
     public String toString() {
 
-        String turnStr, batStr, baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr;
+        String turnStr, batStr, boonStr, baseStr, shopStr, playerStr, emptyPilesStr, providenceEmptyStr, quitStr, gameOverStr;
 
         String attackString = "";
         if (isAttackTurn){
@@ -180,6 +180,8 @@ public class DominionGameState {
 
         batStr = String.format(Locale.US, "There are %d buys, %d actions, and %d treasure remaining.",
                 buys, actions, treasure);
+
+        boonStr = silverBoon ? "A silver boon is in effect.\n" : "";
 
         String[] baseStrs = new String[baseCards.size()];
         for (int i = 0; i < baseCards.size(); i++){
@@ -213,14 +215,18 @@ public class DominionGameState {
 
         emptyPilesStr = String.format(Locale.US, "There are %d empty piles.", emptyPiles);
 
+        providenceEmptyStr = providenceEmpty ? "The providence pile is empty.\n" : "";
+
+        quitStr = playerQuit >= 0 ? "Player #" + playerQuit + " has quit the game." : "No player has quit the game.";
+
         if (isGameOver){
             gameOverStr = "The game is over.";
         } else {
             gameOverStr = "The game is not over.";
         }
 
-        return String.format(Locale.US, "%s\n%s\n%s\n%s\n%s\n%s\n%s", turnStr, batStr,
-                baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr);
+        return String.format(Locale.US, "%s\n%s\n%s%s\n%s\n%s\n%s\n%s%s\n%s", turnStr, batStr,
+                boonStr, baseStr, shopStr, playerStr, emptyPilesStr, providenceEmptyStr, quitStr, gameOverStr);
     }
 
 
