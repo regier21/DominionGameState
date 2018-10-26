@@ -98,6 +98,7 @@ public class DominionGameState {
             this.dominionPlayers[i] = new DominionPlayerState("Player " + i,
                     baseCards.get(PILE_COPPER), //The copper pile
                     baseCards.get(PILE_ESTATE).getCard()); //The estate card
+
         }
 
         //Sets up turn with player 0 as first player
@@ -154,6 +155,18 @@ public class DominionGameState {
         this.actions = gameState.actions;
         this.buys = gameState.buys;
         this.treasure = gameState.treasure;
+    }
+
+    /**
+     * Method to actually "start" the game.
+     * Temporary method so that random card shuffling does not make instances non-identical.
+     * TODO: Merge into constructor
+     */
+    public void start(){
+        for (DominionPlayerState player : dominionPlayers) {
+            //Everyone draws their starting hand
+            player.getDeck().drawMultiple(5);
+        }
     }
 
     //TODO: Delete (maybe) [My vote is yes]
@@ -266,7 +279,7 @@ public class DominionGameState {
             cardPile.removeCard();
             buys--;
             treasure -= cardPile.getCard().getCost();
-            if (cardPile.getAmount() == 0){
+            if (cardPile.isEmpty()){
                 emptyPiles++;
                 if (baseCard && cardIndex == PILE_PROVIDENCE){
                     providenceEmpty = true;
@@ -303,6 +316,9 @@ public class DominionGameState {
                 treasure = 0;
                 buys = 1;
                 actions = 1;
+                DominionPlayerState currPlayer = dominionPlayers[currentTurn];
+                currPlayer.getDeck().discardAll();
+                currPlayer.getDeck().drawMultiple(5);
                 currentTurn = (currentTurn + 1) % 4;
                 attackTurn = currentTurn;
                 silverBoon = false;
@@ -313,6 +329,8 @@ public class DominionGameState {
         return false;
     }
 
+    //TODO: Delete this? I don't think this is an action.
+    //If not deleted, spec requires that we call it in main activity
     /**
      * Determines whether a card may be legally drawn considering whether it is that player's turn.
      * Returns a truth value describing the success of the draw
@@ -385,18 +403,19 @@ public class DominionGameState {
      */
     public boolean isLegalBuy(int playerID, int cardIndex, boolean baseCard) {
         if(this.currentTurn == playerID){
-            if (buys >= 1){
-                if (!baseCard && cardIndex >= 0 && cardIndex < shopCards.size()) {
+            if (buys >= 1){ //Allowed to buy
+                if (!baseCard && cardIndex >= 0 && cardIndex < shopCards.size()) { //Card pile exists
                     DominionShopPileState shopPile = shopCards.get(cardIndex);
-                    if (shopPile.getAmount() >= 1){ //Pile has a card
+                    if (!shopPile.isEmpty()){
                         if (treasure >= shopPile.getCard().getCost()) //Can afford
                             return true;
                     }
                 }
                 else if (baseCard && cardIndex >= 0 && cardIndex < baseCards.size()){
                     DominionShopPileState basePile = baseCards.get(cardIndex);
-                    if (basePile.getAmount() >= 1){
-                        return true;
+                    if (!basePile.isEmpty()){
+                        if (treasure >= basePile.getCard().getCost()) //Can afford
+                            return true;
                     }
                 }
             }
