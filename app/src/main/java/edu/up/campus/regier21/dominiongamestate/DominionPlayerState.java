@@ -13,7 +13,13 @@ public class DominionPlayerState {
     protected final DominionDeckState deck;
     protected int victoryPoints;
 
-    protected DominionPlayerState(String name, DominionShopPileState copper, DominionCardState estate) {
+    /**
+     * Constructor.
+     * @param name The player's name
+     * @param copper The pile where copper is stored. Decremented to create starting deck.
+     * @param estate The estate card. Used to create starting deck.
+     */
+    public DominionPlayerState(String name, DominionShopPileState copper, DominionCardState estate) {
         this.name = name;
 
         //Initializes player deck
@@ -23,7 +29,13 @@ public class DominionPlayerState {
         this.victoryPoints = 3;
     }
 
-    protected DominionPlayerState(DominionPlayerState playerState, boolean isThisPlayer){
+    /**
+     * Copy constructor.
+     * Obfuscates if requested.
+     * @param playerState The player to copy
+     * @param isThisPlayer Whether or not to obfuscate
+     */
+    public DominionPlayerState(DominionPlayerState playerState, boolean isThisPlayer){
         this.name = playerState.name;
         if(isThisPlayer) this.victoryPoints = playerState.victoryPoints;
         else this.victoryPoints = 0;
@@ -43,6 +55,17 @@ public class DominionPlayerState {
         copper.removeAmount(7); //Removes 7 copper from the base card's draw pile
         deck.addManyToDiscard(estate, 3);
         //deck.reshuffle();
+    }
+
+    /**
+     * TODO: Remove
+     * For testing purposes. Replaces cards in hand with specific set of cards to allow testing of actions
+     */
+    public void hack(DominionCardState gold, DominionCardState moat){
+        ArrayList<DominionCardState> hand = deck.getHand();
+        hand.set(0, moat);
+        hand.set(1, gold);
+        hand.set(2, gold);
     }
 
     public DominionDeckState getDeck() {

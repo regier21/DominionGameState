@@ -47,7 +47,9 @@ public class DominionDeckState {
             this.discard.add(DominionCardState.BLANK_CARD);
         }
         //Reveal the top of the discard pile
-        this.discard.add(new DominionCardState(deckState.discard.get(deckState.discard.size()-1)));
+        if (deckState.discard.size() >= 1){
+            this.discard.add(new DominionCardState(deckState.discard.get(deckState.discard.size()-1)));
+        }
 
 
         if(isRealDeck){
