@@ -293,27 +293,6 @@ public class DominionCardState {
         return basicAction(game);
     }
 
-    //Harder actions that we will worry about implementing later
-    /*private boolean harbingerAction() {
-        return true;
-    }
-
-    private boolean remodelAction() { return true; }
-
-    private boolean throneAction() { return true; }
-
-    private boolean artisanAction() { return true; }
-
-    private boolean witchAction() { return true; }
-
-    private boolean libraryAction() {
-        return true;
-    }
-
-    private boolean militiaAction() {
-        return true;
-    }*/
-
     /**
      * Basic action.
      * Used by any card whose action contain the following:
