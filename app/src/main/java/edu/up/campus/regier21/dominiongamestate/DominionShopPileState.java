@@ -64,7 +64,7 @@ public class DominionShopPileState {
      */
     public void removeAmount(int amount){
         this.amount -= amount;
-        this.amount = Math.max(amount, 0);
+        this.amount = Math.max(this.amount, 0);
     }
 
     /**

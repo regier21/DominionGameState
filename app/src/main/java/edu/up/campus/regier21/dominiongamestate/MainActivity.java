@@ -77,11 +77,10 @@ public class MainActivity extends AppCompatActivity {
        /*gameStateTest = gameStateTest.concat("This draw effect animates the reveal of two cards from the top of " +
                "Player 1's deck as demonstrated by revealCard() yielding " + firstInstance.revealCard(0) + "\n");*/
 
-       gameStateTest = gameStateTest.concat("The player now plays both of their gold in hand. " +
-                            "The plays " + (firstInstance.playCard(0, 0) && firstInstance.playCard(0, 0) ?
-                            "do" : "do not") + " succeed.\n");
+       gameStateTest = gameStateTest.concat("The player all the treasure they have in hand. " +
+                        "playAllTreasures() evaluates as " + firstInstance.playAllTreasures(0) + ".\n");
 
-       gameStateTest = gameStateTest.concat("Opting to spend all 6 of their treasure, Player 1 buys 1 Gold card. " +
+       gameStateTest = gameStateTest.concat("Opting to spend their treasure, Player 1 buys 1 Gold card for 6 treasure. " +
                        "buyCard() evaluates as " + firstInstance.buyCard(0, 4, true) + ".\n");
 
        gameStateTest = gameStateTest.concat("Having done all they can, Player 1 decides to end their turn which " +
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
        */
 
        gameStateTest = gameStateTest.concat("Growing impatient as Player 2's turn drags on, Player 1 decides to " +
-               "quitGame. This runs " + firstInstance.quitGame() + "\n");
+               "quitGame. This runs " + firstInstance.quitGame(0) + "\n");
 
        ArrayList<DominionShopPileState> shopCards2 = reader.generateCards(getApplicationContext(), 10, R.raw.shop_cards);
 
