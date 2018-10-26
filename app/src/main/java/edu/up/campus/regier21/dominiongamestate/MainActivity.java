@@ -56,19 +56,20 @@ public class MainActivity extends AppCompatActivity {
        firstInstance.start();
 
        //Set player 1's hand so that we can test
-       firstInstance.dominionPlayers[0].testMoat(baseCards1.get(4).getCard(), shopCards1.get(0).getCard()); //Note: Indices may change in the future. Only here for testing purposes.
+       //Index 4 is gold, index 0 is moat
+       //Note: Indices may change in the future. Only here (and hard-coded) for testing purposes.
+       firstInstance.dominionPlayers[0].testMoat(baseCards1.get(4).getCard(), shopCards1.get(0).getCard());
 
        String gameStateTest = "\n";
 
        gameStateTest = gameStateTest.concat("The player tries to play a Moat, which should let them draw two cards. " +
                "playCard() evaluates as " + firstInstance.playCard(0, 0) + ".\n");
 
-       gameStateTest = gameStateTest.concat("The player now plays both of their gold in hand. " +
-                            "The plays " + (firstInstance.playCard(0, 0) && firstInstance.playCard(0, 0) ?
-                            "do" : "do not") + " succeed.\n");
+       gameStateTest = gameStateTest.concat("The player now plays all the treasure in their hand. " +
+               "playAllTreasures() evaluates as " + firstInstance.playAllTreasures(0) + ".\n");
 
        gameStateTest = gameStateTest.concat("Opting to spend their treasure, Player 1 buys 1 Gold card for 6 treasure. " +
-                       "buyCard() evaluates as " + firstInstance.buyCard(0, 4, true) + ".\n");
+               "buyCard() evaluates as " + firstInstance.buyCard(0, 4, true) + ".\n");
 
        gameStateTest = gameStateTest.concat("Having done all they can, Player 1 decides to end their turn which " +
                "yields " + firstInstance.endTurn(0) + "\n");

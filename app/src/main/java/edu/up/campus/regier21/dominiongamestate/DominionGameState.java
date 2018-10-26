@@ -63,7 +63,6 @@ public class DominionGameState {
      * Dominion game. A game state created in this way should be used as a master copy from which state
      * changes may be copied and obfuscated
      * @param paramNumPlayers The number of players playing
-     * @param ArrayList<DominionShopPileState> Describes the unique cards available for purchase in the shop
      * @param baseCardArray Describes the base cards available in the shop
      * @param shopCardArray Describes the unique cards available for purchase in the shop
      */
@@ -170,7 +169,7 @@ public class DominionGameState {
     @Override
     public String toString() {
 
-        String turnStr, gabStr, baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr;
+        String turnStr, batStr, baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr;
 
         String attackString = "";
         if (isAttackTurn){
@@ -179,7 +178,7 @@ public class DominionGameState {
         }
         turnStr = String.format(Locale.US, "It is player #%d's turn. %s", currentTurn, attackString);
 
-        gabStr = String.format(Locale.US, "There are %d buys, %d actions, and %d treasure remaining.",
+        batStr = String.format(Locale.US, "There are %d buys, %d actions, and %d treasure remaining.",
                 buys, actions, treasure);
 
         String[] baseStrs = new String[baseCards.size()];
@@ -220,7 +219,7 @@ public class DominionGameState {
             gameOverStr = "The game is not over.";
         }
 
-        return String.format(Locale.US, "%s\n%s\n%s\n%s\n%s\n%s\n%s", turnStr, gabStr,
+        return String.format(Locale.US, "%s\n%s\n%s\n%s\n%s\n%s\n%s", turnStr, batStr,
                 baseStr, shopStr, playerStr, emptyPilesStr, gameOverStr);
     }
 
@@ -263,7 +262,7 @@ public class DominionGameState {
      * @return A boolean describing whether the turn was successfully ended
      */
     public boolean endTurn(int playerID){
-        if(this.currentTurn == playerID) {
+        if(!this.isGameOver && this.currentTurn == playerID) {
             if (emptyPiles >= 3 || providenceEmpty){
                 isGameOver = true;
             } else {
@@ -328,7 +327,7 @@ public class DominionGameState {
      * @return Whether action completes successfully.
      */
     public boolean playAllTreasures(int playerID){
-        if (this.currentTurn == playerID){
+        if (!this.isGameOver && this.currentTurn == playerID){
             ArrayList<DominionCardState> hand = dominionPlayers[currentTurn].getDeck().getHand();
 
             //Loop through every card. Using custom loop, because hand changes as we iterate through it,
@@ -355,7 +354,7 @@ public class DominionGameState {
      * @return A boolean describing whether the selected card may legally be played
      */
     public boolean isLegalPlay(int playerID, int cardIndex) {
-        if(this.currentTurn == playerID) {
+        if(!this.isGameOver && this.currentTurn == playerID) {
             DominionDeckState deck = dominionPlayers[playerID].getDeck();
             if (cardIndex >= 0 && cardIndex < deck.getHandSize()){
                 DominionCardState card = deck.getHand().get(cardIndex);
@@ -372,7 +371,7 @@ public class DominionGameState {
      * @return A boolean describing whether the selected card may legally be bought
      */
     public boolean isLegalBuy(int playerID, int cardIndex, boolean baseCard) {
-        if(this.currentTurn == playerID){
+        if(!this.isGameOver && this.currentTurn == playerID){
             if (buys >= 1){ //Allowed to buy
                 if (!baseCard && cardIndex >= 0 && cardIndex < shopCards.size()) { //Card pile exists
                     DominionShopPileState shopPile = shopCards.get(cardIndex);
