@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
        //Instantiate a DominionGameState object to store all relevant game information
        DominionGameState firstInstance = new DominionGameState(4, baseCards1, shopCards1);
-       DominionGameState secondInstance = new DominionGameState(firstInstance, firstInstance.dominionPlayers[0]);
+       DominionGameState secondInstance = new DominionGameState(firstInstance);
         //COMMENT FOR THE GRADER: dominionPlayers[0] is "player 1"
 
        //Recording "functionality" of game actions
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
        DominionGameState thirdInstance = new DominionGameState(4, baseCards2, shopCards2);
        Log.i(TAG, firstInstance.toString());
 
-       DominionGameState fourthInstance = new DominionGameState(thirdInstance, thirdInstance.dominionPlayers[0]);
+       DominionGameState fourthInstance = new DominionGameState(thirdInstance);
 
        String str2 = secondInstance.toString();
        String str4 = fourthInstance.toString();

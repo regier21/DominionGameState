@@ -60,8 +60,14 @@ public class DominionGameState {
     //  two players play
     private final int VICTORY_CARDS_2_PLAYER = 8;
 
-
-
+    /**
+     * Constructs a game state fully representing all objects, logical actions and players within a
+     * Dominion game. A game state created in this way should be used as a master copy from which state
+     * changes may be copied and obfuscated
+     * @param paramNumPlayers The number of players playing
+     * @param ArrayList <DominionShopPileState> Describes the unique cards available for purchase in the shop
+     * @param baseCardArray Describes the base cards available in the shop
+     */
     public DominionGameState(int paramNumPlayers, ArrayList<DominionShopPileState> baseCardArray,
                               ArrayList<DominionShopPileState> shopCardArray) {
 
@@ -110,10 +116,14 @@ public class DominionGameState {
         this.emptyPiles = 0;
     }
 
-    //obfuscated copy
-    public DominionGameState(DominionGameState gameState, DominionPlayerState playerState){
-        this.baseCards= new ArrayList<DominionShopPileState>();
-        this.shopCards= new ArrayList<DominionShopPileState>();
+    /**
+     * Constructs an obfuscated copy of a game's state, as purposed to send to players to inform of
+     * update game state changes
+     * @param gameState Relevant DominionGameState from which data will be gathered
+     */
+    public DominionGameState(DominionGameState gameState){
+        this.baseCards= new ArrayList<>();
+        this.shopCards= new ArrayList<>();
 
         for(DominionShopPileState basePileState: gameState.baseCards){
             this.baseCards.add(new DominionShopPileState(basePileState));
@@ -128,7 +138,6 @@ public class DominionGameState {
 
         //copy each player including the deckState
         for (int i = 0; i < this.numPlayers; i++) {
-            //if(i == playerState)
             this.dominionPlayers[i] = new DominionPlayerState(gameState.dominionPlayers[i],
                     gameState.currentTurn == i);
         }
@@ -240,6 +249,14 @@ public class DominionGameState {
         return false;
     }*/
 
+    /**
+     * Moves a card from the shop to a player's hand
+     * @param playerID PlayerID in question, for which data will be found
+     * @param cardIndex Relative location of the card one wishes to buy
+     * @param baseCard Determines exists in the shop card group or base card group
+     *
+     * @return A boolean describing whether the card was successfully bought
+     */
     public boolean buyCard(int playerID, int cardIndex, boolean baseCard){
         if (isLegalBuy(playerID, cardIndex, baseCard)) {
             DominionShopPileState cardPile;
@@ -272,6 +289,12 @@ public class DominionGameState {
         return false;
     }*/
 
+    /**
+     * Ends the player's turn, returning a boolean regarding the success
+     * @param playerID PlayerID in question, for which data will be found
+     *
+     * @return A boolean describing whether the turn was successfully ended
+     */
     public boolean endTurn(int playerID){
         if(this.currentTurn == playerID) {
             if (emptyPiles >= 3 || providenceEmpty){
