@@ -65,6 +65,7 @@ public class DominionGameState {
      * @param paramNumPlayers The number of players playing
      * @param ArrayList<DominionShopPileState> Describes the unique cards available for purchase in the shop
      * @param baseCardArray Describes the base cards available in the shop
+     * @param shopCardArray Describes the unique cards available for purchase in the shop
      */
     public DominionGameState(int paramNumPlayers, ArrayList<DominionShopPileState> baseCardArray,
                               ArrayList<DominionShopPileState> shopCardArray) {
@@ -286,12 +287,13 @@ public class DominionGameState {
      * Allows the user to quit the game so long as the game has not already been quit.
      * Returns a truth value describing the success of this action
      *
+     * @param playerQuit The player who is choosing to quit the game
      * @return A boolean describing whether the game was successfully quit
      */
-    public boolean quitGame(){
+    public boolean quitGame(int playerQuit){
         if(!isGameOver) {
             this.isGameOver = true;
-            this.playerQuit = this.currentTurn;
+            this.playerQuit = playerQuit;
             return true;
         }
         return false;
@@ -310,7 +312,37 @@ public class DominionGameState {
             if(!card.cardAction(this)){
                 return false;
             }
+            if(card.getType() == DominionCardType.ACTION){
+                actions--;
+            }
             deck.discard(cardIndex);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Action which will play every treasure card in player's hand.
+     *
+     * @param playerID The player performing the action. Must be their turn
+     * @return Whether action completes successfully.
+     */
+    public boolean playAllTreasures(int playerID){
+        if (this.currentTurn == playerID){
+            ArrayList<DominionCardState> hand = dominionPlayers[currentTurn].getDeck().getHand();
+
+            //Loop through every card. Using custom loop, because hand changes as we iterate through it,
+            //      breaking a regular for loop.
+            int i = 0;
+            while (i < hand.size()){
+                DominionCardState card = hand.get(i);
+                if (card.getType() == DominionCardType.TREASURE){
+                    playCard(playerID, i);
+                }
+                else {
+                    i++;
+                }
+            }
             return true;
         }
         return false;
