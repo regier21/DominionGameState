@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
      * Solution: Using class name as a tag
      **/
     private static final String TAG = MainActivity.class.getSimpleName();
-    //TODO: Comment every method
-    //TODO: Only read cards we will use in alpha
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,36 +51,27 @@ public class MainActivity extends AppCompatActivity {
         //COMMENT FOR THE GRADER: dominionPlayers[0] is "player 1"
 
        //Recording "functionality" of game actions
-       String gameStateTest = shopCards1.toString() + "\n";
-       gameStateTest = gameStateTest.concat(baseCards1.toString()) + "\n";
-       gameStateTest = gameStateTest.concat("FIRST INSTANCE:\n" + firstInstance.toString() + "\n");
 
-       //gameStateTest = gameStateTest.concat("Player 1's turn has just began. They decide to play a Moat. playCard() " +
-       //        "runs " + firstInstance.playCard(0, ) + ".\n");
+       //Have players draw cards
+       firstInstance.start();
 
-       gameStateTest = gameStateTest.concat("The Moat triggers its draw effect as " + firstInstance.drawCard(0)
-               + " granting Player 1 two more cards.\n");
+       //Set player 1's hand so that we can test
+       firstInstance.dominionPlayers[0].testMoat(baseCards1.get(4).getCard(), shopCards1.get(0).getCard()); //Note: Indices may change in the future. Only here for testing purposes.
 
-       //TODO: Delete this
-       /*gameStateTest = gameStateTest.concat("This draw effect animates the reveal of two cards from the top of " +
-               "Player 1's deck as demonstrated by revealCard() yielding " + firstInstance.revealCard(0) + "\n");*/
+       String gameStateTest = "\n";
+
+       gameStateTest = gameStateTest.concat("The player tries to play a Moat, which should let them draw two cards. " +
+               "playCard() evaluates as " + firstInstance.playCard(0, 0) + ".\n");
+
+       gameStateTest = gameStateTest.concat("The player now plays both of their gold in hand. " +
+                            "The plays " + (firstInstance.playCard(0, 0) && firstInstance.playCard(0, 0) ?
+                            "do" : "do not") + " succeed.\n");
 
        gameStateTest = gameStateTest.concat("Opting to spend all 6 of their treasure, Player 1 buys 1 Gold card. " +
                        "buyCard() evaluates as " + firstInstance.buyCard(0, 4, true) + ".\n");
 
        gameStateTest = gameStateTest.concat("Having done all they can, Player 1 decides to end their turn which " +
                "yields " + firstInstance.endTurn(0) + "\n");
-
-       //TODO: Delete this
-       /*gameStateTest = gameStateTest.concat("Player 2 has started their turn and decided to attack Player 1 with a " +
-               "militia. \nPlayer 1 must choose two cards to discard. Selecting two Witches resolves as "
-               + firstInstance.chooseCard(0) + "\n");*/
-
-       //TODO: Delete this
-       /*
-       gameStateTest = gameStateTest.concat("The two Witches selected are now being discarded. discardCard() " +
-               "evaluates as " + firstInstance.discardCard(0) + "\n");
-       */
 
        gameStateTest = gameStateTest.concat("Growing impatient as Player 2's turn drags on, Player 1 decides to " +
                "quitGame. This runs " + firstInstance.quitGame() + "\n");

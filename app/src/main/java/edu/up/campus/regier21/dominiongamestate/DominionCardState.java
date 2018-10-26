@@ -14,6 +14,10 @@ import static android.content.ContentValues.TAG;
  * @author Julian Donovan, Hayden Liao, Ashika Mulagada, Ryan Regier
  */
 public class DominionCardState {
+
+    //A card with no data, used for obfuscation
+    public static final DominionCardState BLANK_CARD = new DominionCardState();
+
     //Card attributes
     //Final because only one instance is made per card. Changing an attribute would change all copies
     private final String title;
@@ -88,7 +92,7 @@ public class DominionCardState {
      * Creates empty card
      * Used to obfuscate cards players cannot "see"
      */
-    public DominionCardState(){
+    private DominionCardState(){
         this.title = "Blank";
         this.photoID = null;
         this.text = "Blank text";
@@ -211,9 +215,14 @@ public class DominionCardState {
 
     public int getAddedBuys() { return addedBuys; }
 
+    /**
+     * Calculates the number of victory points card is worth
+     * @param totalCards Total number of cards in deck. Effects VP calculation for gardens
+     * @return The VP worth of this card
+     */
     public int getVictoryPoints(int totalCards) {
         if(title.equals("Gardens")) return totalCards/10;
-        return victoryPoints;
+        else return victoryPoints;
     }
 
     private boolean moatAction(DominionGameState game) {
@@ -226,7 +235,23 @@ public class DominionCardState {
         return basicAction(game);
     }
 
+    /////////////////////////////////////////////////////////////////////////
+    /*
+    Functions below this point are card actions. They are called when the card is played.
+    Note that we cannot know what functions will be called until runtime, since cards are linked to
+        methods by reading the XML.
+    It is assumed the card is legal to play - these methods will not check for sufficient actions,
+        current player's turn, ect.
 
+    */
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Council room action:
+     * +4 Cards, 1 Buy, Each other player draws a card
+     * @param game The game state the card is played in
+     * @return Action completed successfuly
+     */
     private boolean councilRoomAction(DominionGameState game) {
         //Card text: "Each other player draws a card"
         for (int i = 0; i < game.dominionPlayers.length; i++) {
@@ -235,15 +260,30 @@ public class DominionCardState {
         return basicAction(game);
     }
 
-    //TODO: Should player have a choice here?
+    /**
+     * Money lender action:
+     * You may trash a Copper from your hand for +3 Gold
+     *
+     * Implemented assuming player will only play card if they will trash copper
+     * (there is no reason to play it otherwise)
+     * @param game The game state the card is played in
+     * @return Action completed successfully, meaning Copper in hand is trashed
+     */
     private boolean moneylenderAction(DominionGameState game) {
-        if(game.dominionPlayers[game.currentTurn].getDeck().discard("Copper") /*TODO: Use card ID instead*/) {
+        if(game.dominionPlayers[game.currentTurn].getDeck().discard("Copper")) {
             game.treasure += 3;
             return true;
         }
         return false;
     }
 
+    /**
+     * Silver action.
+     * Needed to deal with market effect.
+     *
+     * @param game The game state the card is played in
+     * @return Action completed successfully.
+     */
     private boolean silverAction(DominionGameState game) {
         if(game.silverBoon) {
             game.treasure += 1; //Handles merchant silver boon
@@ -283,6 +323,8 @@ public class DominionCardState {
      *     <li>Buys</li>
      *     <li>Treasure</li>
      * </ul>
+     *
+     * @param game The game the card is played in
      * @return Action success
      */
     private boolean basicAction(DominionGameState game) {
