@@ -37,16 +37,17 @@ public class DominionGameState {
 
     protected DominionPlayerState dominionPlayers[]; //Sorted by order of turn
     protected int currentTurn;
-    protected int attackTurn; //player id of responder
+    protected int attackTurn; //Player ID of responder
     protected boolean isAttackTurn;
     protected boolean isGameOver;
+    protected int playerQuit; //Used to identify which player exited. -1 describes no player having quit
 
     protected int numPlayers;
 
     protected int actions;
     protected int buys;
     protected int treasure;
-    protected boolean silverBoon; //Merchant: first silver is worth 1 more
+    protected boolean silverBoon; //Merchant: First silver is worth 1 more
 
     private int emptyPiles;
     private boolean providenceEmpty = false;
@@ -98,9 +99,10 @@ public class DominionGameState {
         this.actions = 1;
         this.silverBoon = false;
 
-        this.isGameOver = false;
+        this.isGameOver = false; //The game is not over
+        this.playerQuit = -1; //No player has quit
 
-        this.attackTurn = this.currentTurn; //in the event of an attack
+        this.attackTurn = this.currentTurn; //In the event of an attack
         this.isAttackTurn = false;
 
         this.emptyPiles = 0;
@@ -132,6 +134,8 @@ public class DominionGameState {
         this.attackTurn = gameState.attackTurn;
         this.isAttackTurn = gameState.isAttackTurn;
         this.isGameOver = gameState.isGameOver;
+        this.playerQuit = gameState.playerQuit;
+
         this.emptyPiles = gameState.emptyPiles;
         this.providenceEmpty = gameState.providenceEmpty;
         this.silverBoon = gameState.silverBoon;
@@ -141,7 +145,7 @@ public class DominionGameState {
         this.treasure = gameState.treasure;
     }
 
-    //TODO: Delete (maybe)
+    //TODO: Delete (maybe) [My vote is yes]
     /**
      * Yields information to the player as necessary, obscuring game state data not relevant to that particular player
      * @param state Relevant DominionGameState from which data will be gathered
@@ -213,7 +217,7 @@ public class DominionGameState {
     //Start of actions that can be performed by a player
 
     /*
-    //TODO: Delete this..?
+    //TODO: Delete this..? [Also yes, and in regard to this one I question why we really have it at all]
     public boolean revealCard(int playerID, int handIndex){
         if(this.currentTurn == playerID && this.dominionPlayers[playerID].getDeck().getHandSize() > 0) {
             //Reveal card
@@ -297,7 +301,6 @@ public class DominionGameState {
         return false;
     }
 
-    //TODO: This looks wrong, and simply setting game over makes it impossible to see if game ended normally, or there was a forefit
     /**
      * Allows the user to quit the game so long as the game has not already been quit.
      * Returns a truth value describing the success of this action
@@ -305,7 +308,12 @@ public class DominionGameState {
      * @return A boolean describing whether the game was successfully quit
      */
     public boolean quitGame(){
-        return (!isGameOver && (this.isGameOver = true));
+        if(!isGameOver) {
+            this.isGameOver = true;
+            this.playerQuit = this.currentTurn;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -320,7 +328,7 @@ public class DominionGameState {
             DominionCardState card = deck.getHand().get(cardIndex);
             if(!card.cardAction(this)){
                 return false;
-            };
+            }
             deck.discard(cardIndex);
             return true;
         }

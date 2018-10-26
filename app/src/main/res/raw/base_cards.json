@@ -7,7 +7,7 @@
       "cost": 0,
       "type": "TREASURE",
       "amount": 60,
-      "action": "baseAction",
+      "action": "basicAction",
       "addedTreasure": 1
     },
     {
@@ -17,7 +17,7 @@
       "cost": 2,
       "type": "VICTORY",
       "amount": 12,
-      "action": "baseAction",
+      "action": "basicAction",
       "victoryPoints": 1
     },
     {
@@ -37,7 +37,7 @@
       "cost": 5,
       "type": "VICTORY",
       "amount": 12,
-      "action": "baseAction",
+      "action": "basicAction",
       "victoryPoints": 3
     },
     {
@@ -47,7 +47,7 @@
       "cost": 6,
       "type": "TREASURE",
       "amount": 30,
-      "action": "baseAction",
+      "action": "basicAction",
       "addedTreasure": 3
     },
     {
@@ -57,7 +57,7 @@
       "cost": 0,
       "type": "TREASURE",
       "amount": 12,
-      "action": "baseAction",
+      "action": "basicAction",
       "victoryPoints": 6
     },
     {
@@ -67,7 +67,7 @@
       "cost": 0,
       "type": "BLANK",
       "amount": 0,
-      "action": "baseAction"
+      "action": "basicAction"
     }
   ]
 }
