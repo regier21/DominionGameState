@@ -130,7 +130,7 @@ public class DominionGameState {
         }
 
         for(DominionShopPileState shopPileState: gameState.shopCards){
-            this.baseCards.add(new DominionShopPileState(shopPileState));
+            this.shopCards.add(new DominionShopPileState(shopPileState));
         }
 
         this.numPlayers = gameState.numPlayers;
